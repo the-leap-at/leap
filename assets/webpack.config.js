@@ -29,8 +29,28 @@ module.exports = (env, options) => ({
         }
       },
       {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader']
+        test: /\.(css|scss|sass)$/,
+        use: [
+          "style-loader",
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "sass-loader"
+        ]
+      },
+      {
+        test: /\.(eot|svg|ttf|woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
+        loader: "file-loader",
+        options: {
+          name: "[name].[ext]",
+          outputPath: "../fonts"
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/,
+        loader: "file-loader",
+        query: {
+          name: "[name].[ext]?[hash]"
+        }
       }
     ]
   },
