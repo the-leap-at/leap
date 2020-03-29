@@ -24,6 +24,7 @@ defmodule LeapWeb do
       import Plug.Conn
       import LeapWeb.Gettext
       alias LeapWeb.Router.Helpers, as: Routes
+      import Phoenix.LiveView.Controller
     end
   end
 
@@ -42,6 +43,8 @@ defmodule LeapWeb do
       import LeapWeb.ErrorHelpers
       import LeapWeb.Gettext
       alias LeapWeb.Router.Helpers, as: Routes
+
+      import Phoenix.LiveView.Helpers
     end
   end
 
@@ -50,6 +53,7 @@ defmodule LeapWeb do
       use Phoenix.Router
       import Plug.Conn
       import Phoenix.Controller
+      import Phoenix.LiveView.Router
     end
   end
 
