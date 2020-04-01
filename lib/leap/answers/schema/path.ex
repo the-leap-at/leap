@@ -2,6 +2,7 @@ defmodule Leap.Answers.Schema.Path do
   @moduledoc "Path schema"
 
   use Ecto.Schema
+  import Ecto.Changeset
 
   alias Leap.Answers.Schema.Step
 
@@ -13,5 +14,10 @@ defmodule Leap.Answers.Schema.Path do
 
     has_many :steps, Step
     timestamps()
+  end
+
+  def changeset_update(path, attrs) do
+    path
+    |> cast(attrs, [:title, :description])
   end
 end
