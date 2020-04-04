@@ -64,6 +64,37 @@ defmodule LeapWeb do
     end
   end
 
+  def live do
+    quote do
+      use Phoenix.LiveView
+
+      def handle_info(
+            {:perform_action, {component_module, component_id, action_title, params}},
+            socket
+          ) do
+        send_update(component_module, id: component_id, action: action_title, params: params)
+        {:noreply, socket}
+      end
+
+      def handle_info(
+            {:delay_action, delay,
+             {component_module, component_id, action_title, _params} = action},
+            socket
+          ) do
+        ref_key =
+          to_string(component_module) <> to_string(component_id) <> to_string(action_title)
+
+        if Map.get(socket.assigns, ref_key) do
+          Process.cancel_timer(Map.get(socket.assigns, ref_key))
+        end
+
+        ref = Process.send_after(self(), {:perform_action, action}, delay)
+
+        {:noreply, assign(socket, ref_key, ref)}
+      end
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """
