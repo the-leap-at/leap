@@ -1,4 +1,4 @@
-defmodule LeapWeb.AnswerView do
+defmodule LeapWeb.LiveView do
   use LeapWeb, :view
   alias LeapWeb.Components
 end

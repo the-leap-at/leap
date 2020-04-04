@@ -5,7 +5,7 @@ defmodule LeapWeb.Components.EditPath do
   use Phoenix.LiveComponent
   use TypedStruct
 
-  alias LeapWeb.PathView
+  alias LeapWeb.ComponentsView
   alias Leap.Answers
   alias Leap.Answers.Schema.Path
 
@@ -62,6 +62,6 @@ defmodule LeapWeb.Components.EditPath do
   end
 
   def render(assigns) do
-    Phoenix.View.render(PathView, "edit_path.html", assigns)
+    Phoenix.View.render(ComponentsView, "edit_path.html", assigns)
   end
 end
