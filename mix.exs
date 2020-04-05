@@ -46,7 +46,8 @@ defmodule Leap.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:floki, ">= 0.0.0", only: :test},
-      {:typed_struct, "~> 0.1.4"}
+      {:typed_struct, "~> 0.1.4"},
+      {:machinery, "~> 1.0.0"}
     ]
   end
 

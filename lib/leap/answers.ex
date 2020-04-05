@@ -16,7 +16,14 @@ defmodule Leap.Answers do
 
   @spec update_path(Path.t(), attrs :: map()) ::
           {:ok, Path.t()} | {:error, Ecto.Changeset.t(Path.t())}
-  def update_path(path, attrs) do
+  @doc "when updating a new path, it transitions to draft state"
+  def update_path(%Path{state: :new} = path, attrs) do
+    with {:ok, path} = Machinery.transition_to(path, Path.StateMachine, :draft) do
+      update_path(path, attrs)
+    end
+  end
+
+  def update_path(%Path{state: :draft} = path, attrs) do
     path
     |> Path.changeset_update(attrs)
     |> Repo.update()

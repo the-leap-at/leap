@@ -2,7 +2,7 @@ defmodule LeapWeb.Components.EditPath do
   @moduledoc """
   - Updates paths
   """
-  use Phoenix.LiveComponent
+  use LeapWeb, :component
   use TypedStruct
 
   alias LeapWeb.ComponentsView
@@ -53,10 +53,12 @@ defmodule LeapWeb.Components.EditPath do
   end
 
   def handle_event("update_path", %{"path" => path_params}, %{assigns: %{state: state}} = socket) do
-    send(
-      self(),
-      {:delay_action, @delay, {__MODULE__, state.component_id, :update_path, path_params}}
-    )
+    if has_values?(path_params) do
+      send(
+        self(),
+        {:delay_action, @delay, {__MODULE__, state.component_id, :update_path, path_params}}
+      )
+    end
 
     {:noreply, socket}
   end

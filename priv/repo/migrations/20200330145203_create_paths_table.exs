@@ -5,6 +5,7 @@ defmodule Leap.Repo.Migrations.CreatePathsTable do
     create table(:paths) do
       add :title, :string
       add :description, :text
+      add :state, :text, null: false, default: "new"
 
       timestamps()
     end

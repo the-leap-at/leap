@@ -95,6 +95,16 @@ defmodule LeapWeb do
     end
   end
 
+  def component do
+    quote do
+      use Phoenix.LiveComponent
+
+      defp has_values?(%{} = map) do
+        map |> Map.values() |> Enum.any?(&(not (&1 in ["", nil])))
+      end
+    end
+  end
+
   @doc """
   When used, dispatch to the appropriate controller/view/etc.
   """
