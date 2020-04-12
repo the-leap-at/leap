@@ -13,4 +13,5 @@
     <%= error_tag f, :description %>
   </div>
 <% end %>
+<%= live_component @socket, Components.EditPath.NewStep, id: "new_step", path_id: @state.path.id %>
 </div>
