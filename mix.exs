@@ -47,7 +47,9 @@ defmodule Leap.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:floki, ">= 0.0.0", only: :test},
       {:typed_struct, "~> 0.1.4"},
-      {:machinery, "~> 1.0.0"}
+      {:machinery, "~> 1.0.0"},
+      {:html_sanitize_ex, "~> 1.3.0"},
+      {:earmark, "~> 1.4.3"}
     ]
   end
 

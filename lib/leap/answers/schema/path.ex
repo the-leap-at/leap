@@ -1,8 +1,7 @@
 defmodule Leap.Answers.Schema.Path do
   @moduledoc "Path schema"
 
-  use Ecto.Schema
-  import Ecto.Changeset
+  use Leap, :schema
   import EctoEnum
 
   alias Leap.Answers.Paths
@@ -45,6 +44,7 @@ defmodule Leap.Answers.Schema.Path do
   def changeset_update(path, attrs) do
     path
     |> cast(attrs, [:title, :description])
+    |> strip_html_tags(:description)
   end
 
   def changeset_update_state(path, attrs) do
