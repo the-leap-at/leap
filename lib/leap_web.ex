@@ -67,6 +67,7 @@ defmodule LeapWeb do
   def live do
     quote do
       use Phoenix.LiveView
+      alias LeapWeb.Router.Helpers, as: Routes
 
       def handle_info(
             {:perform_action, {component_module, component_id, action_title, params}},
@@ -98,6 +99,7 @@ defmodule LeapWeb do
   def component do
     quote do
       use Phoenix.LiveComponent
+      alias LeapWeb.Router.Helpers, as: Routes
 
       defp has_values?(%{} = map) do
         map |> Map.values() |> Enum.any?(&(not (&1 in ["", nil])))

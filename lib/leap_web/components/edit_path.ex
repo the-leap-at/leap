@@ -4,6 +4,8 @@ defmodule LeapWeb.Components.EditPath do
 
   ### Example of delayed action
   ```
+  @delay 500
+
   def handle_event("update_path", %{"path" => path_params}, %{assigns: %{state: state}} = socket) do
     if has_values?(path_params) do
       send(
@@ -37,8 +39,6 @@ defmodule LeapWeb.Components.EditPath do
   alias Leap.Answers
   alias Leap.Answers.Schema.Path
 
-  @delay 500
-
   defmodule State do
     @moduledoc false
 
@@ -69,9 +69,10 @@ defmodule LeapWeb.Components.EditPath do
   def handle_event("update_path", %{"path" => path_params}, %{assigns: %{state: state}} = socket) do
     case Answers.update_path(state.path, path_params) do
       {:ok, path} ->
-        state = %State{state | path: path, path_changeset: Answers.change_path(path)}
+        # state = %State{state | path: path, path_changeset: Answers.change_path(path)}
 
-        {:noreply, assign(socket, :state, state)}
+        # {:noreply, assign(socket, :state, state)}
+        {:noreply, push_patch(socket, to: Routes.live_path(socket, LeapWeb.PathLive, path.id))}
 
       {:error, changeset} ->
         state = %State{state | path_changeset: changeset}

@@ -19,6 +19,7 @@ defmodule LeapWeb.Router do
     pipe_through :browser
 
     live "/path/:path_id", PathLive
+    live "/path/:path_id/:action", PathLive
   end
 
   # Other scopes may use custom stacks.
