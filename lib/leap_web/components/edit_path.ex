@@ -33,7 +33,7 @@ defmodule LeapWeb.Components.EditPath do
   use LeapWeb, :component
   use TypedStruct
 
-  alias LeapWeb.ComponentsView
+  alias LeapWeb.Components.EditPathView
   alias Leap.Answers
   alias Leap.Answers.Schema.Path
 
@@ -81,6 +81,6 @@ defmodule LeapWeb.Components.EditPath do
   end
 
   def render(assigns) do
-    Phoenix.View.render(ComponentsView, "edit_path.html", assigns)
+    Phoenix.View.render(EditPathView, "edit_path.html", assigns)
   end
 end

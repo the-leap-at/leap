@@ -5,7 +5,6 @@ defmodule Leap.Answers.Schema.Path do
   import EctoEnum
 
   alias Leap.Answers.Paths
-  alias Leap.Answers.Schema.Step
 
   defenum StateEnum, ["new", "draft", "published"]
 
@@ -37,7 +36,6 @@ defmodule Leap.Answers.Schema.Path do
     field :description, :string
     field :state, StateEnum, default: "new"
 
-    has_many :steps, Step
     timestamps()
   end
 

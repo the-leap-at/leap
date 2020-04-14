@@ -1,4 +1,4 @@
-defmodule LeapWeb.LiveView do
+defmodule LeapWeb.Live.PathView do
   use LeapWeb, :view
   alias LeapWeb.Components
 end

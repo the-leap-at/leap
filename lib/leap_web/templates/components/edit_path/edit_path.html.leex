@@ -12,12 +12,6 @@
     </div>
     <%= error_tag f, :description %>
   </div>
-  <div class="field">
-    <div class="control content">
-      <%= textarea f, :laser, id: "laser", class: "easy-mde-field input is-large" %>
-    </div>
-    <%= error_tag f, :laser %>
-  </div>
   <div class="control">
     <%= submit "SAVE", phx_disable_with: "Saving...",
       class: "button is-primary is-small is-fullwidth" %>

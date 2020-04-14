@@ -1,4 +1,4 @@
-defmodule LeapWeb.ComponentsView do
+defmodule LeapWeb.Components.EditPathView do
   use LeapWeb, :view
 
   def markdown_to_html(body) do
