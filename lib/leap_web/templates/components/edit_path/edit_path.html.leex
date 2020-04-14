@@ -7,8 +7,8 @@
     <%= error_tag f, :title %>
   </div>
   <div class="field">
-    <div class="control content">
-      <%= textarea f, :description, id: "description", class: "easy-mde-field input is-large" %>
+    <div class="control content easy-mde-wrapper">
+      <%= textarea f, :description, id: "#{@state.component_id}_description", class: "easy-mde-textarea input is-large" %>
     </div>
     <%= error_tag f, :description %>
   </div>
