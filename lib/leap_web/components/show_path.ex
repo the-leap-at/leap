@@ -5,7 +5,6 @@ defmodule LeapWeb.Components.ShowPath do
   use LeapWeb, :component
   use TypedStruct
 
-  alias LeapWeb.Components.ShowPathView
   alias Leap.Answers
   alias Leap.Answers.Schema.Path
 
@@ -34,7 +33,12 @@ defmodule LeapWeb.Components.ShowPath do
     {:ok, assign(socket, :state, state)}
   end
 
-  def render(assigns) do
-    Phoenix.View.render(ShowPathView, "show_path.html", assigns)
+  def markdown_to_html(body) do
+    safe =
+      body
+      |> Earmark.as_html!()
+      |> HtmlSanitizeEx.markdown_html()
+
+    raw({:safe, safe})
   end
 end

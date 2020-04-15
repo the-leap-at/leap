@@ -3,8 +3,6 @@ defmodule LeapWeb.PathLive do
   use LeapWeb, :live
   use TypedStruct
 
-  alias LeapWeb.Live.PathView
-
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
@@ -27,9 +25,5 @@ defmodule LeapWeb.PathLive do
       )
 
     {:noreply, assign(socket, path_component: path_component)}
-  end
-
-  def render(assigns) do
-    Phoenix.View.render(PathView, "path.html", assigns)
   end
 end

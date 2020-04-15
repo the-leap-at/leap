@@ -67,6 +67,9 @@ defmodule LeapWeb do
   def live do
     quote do
       use Phoenix.LiveView
+      use Phoenix.HTML
+      import LeapWeb.ErrorHelpers
+      import LeapWeb.Gettext
       alias LeapWeb.Router.Helpers, as: Routes
 
       def handle_info(
@@ -99,6 +102,9 @@ defmodule LeapWeb do
   def component do
     quote do
       use Phoenix.LiveComponent
+      use Phoenix.HTML
+      import LeapWeb.ErrorHelpers
+      import LeapWeb.Gettext
       alias LeapWeb.Router.Helpers, as: Routes
 
       defp has_values?(%{} = map) do
