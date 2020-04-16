@@ -1,5 +1,7 @@
-<h1 class="title"><%= @state.path.title %></h1>
-<div class="content">
-  <%= markdown_to_html(@state.path.description) %>
+<div id="<%= @state.component_id%>">
+  <h1 class="title"><%= @state.path.title %></h1>
+  <div class="content">
+    <%= markdown_to_html(@state.path.description) %>
+  </div>
+  <%= live_patch "Edit Path", class: "button is-primary is-small is-fullwidth", to: Routes.live_path(@socket, LeapWeb.PathLive, @state.path.id, "edit") %>
 </div>
-<%= live_patch "Edit Path", class: "button is-primary is-small is-fullwidth", to: Routes.live_path(@socket, LeapWeb.PathLive, @state.path.id, "edit") %>

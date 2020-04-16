@@ -107,8 +107,13 @@ defmodule LeapWeb do
       import LeapWeb.Gettext
       alias LeapWeb.Router.Helpers, as: Routes
 
-      defp has_values?(%{} = map) do
-        map |> Map.values() |> Enum.any?(&(not (&1 in ["", nil])))
+      def markdown_to_html(body) do
+        safe =
+          body
+          |> Earmark.as_html!(breaks: true)
+          |> HtmlSanitizeEx.markdown_html()
+
+        raw({:safe, safe})
       end
     end
   end

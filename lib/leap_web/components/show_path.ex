@@ -5,7 +5,6 @@ defmodule LeapWeb.Components.ShowPath do
   use LeapWeb, :component
   use TypedStruct
 
-  alias Leap.Answers
   alias Leap.Answers.Schema.Path
 
   defmodule State do
@@ -22,23 +21,12 @@ defmodule LeapWeb.Components.ShowPath do
     {:ok, socket}
   end
 
-  def update(%{id: component_id, path_id: path_id}, socket) do
-    path = Answers.get!(Path, path_id)
-
+  def update(%{id: component_id, path: path}, socket) do
     state = %State{
       component_id: component_id,
       path: path
     }
 
     {:ok, assign(socket, :state, state)}
-  end
-
-  def markdown_to_html(body) do
-    safe =
-      body
-      |> Earmark.as_html!()
-      |> HtmlSanitizeEx.markdown_html()
-
-    raw({:safe, safe})
   end
 end
