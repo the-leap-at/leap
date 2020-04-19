@@ -14,8 +14,7 @@ defmodule Leap.Answers.Schema.Path do
       states: StateEnum.__valid_values__(),
       transitions: %{
         new: :draft,
-        draft: :published,
-        published: :draft
+        draft: :published
       }
 
     def guard_transition(path, "published") do
@@ -45,9 +44,23 @@ defmodule Leap.Answers.Schema.Path do
     |> strip_html_tags(:content)
   end
 
-  def changeset_update_state(path, attrs) do
+  def changeset_publish(path, attrs) do
+    path
+    |> cast(attrs, [:title, :content])
+    |> validate_required([:title, :content])
+    |> strip_html_tags(:content)
+  end
+
+  def changeset_state_transition(path, attrs) do
     path
     |> cast(attrs, [:state])
     |> validate_required([:state])
+  end
+
+  def changeset_state_transition_error(path, attrs, error) do
+    path
+    |> cast(attrs, [:state])
+    |> validate_required([:state])
+    |> add_error(:state, error)
   end
 end

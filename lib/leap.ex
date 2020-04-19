@@ -7,6 +7,17 @@ defmodule Leap do
   if it comes from the database, an external API or others.
   """
 
+  def context do
+    quote do
+      alias Leap.Repo
+      @spec get(Ecto.Queryable.t(), id :: integer()) :: schema() | nil
+      def get(queryable, id), do: Repo.get(queryable, id)
+
+      @spec get!(Ecto.Queryable.t(), id :: integer()) :: schema() | nil
+      def get!(queryable, id), do: Repo.get(queryable, id)
+    end
+  end
+
   def schema do
     quote do
       use Ecto.Schema
