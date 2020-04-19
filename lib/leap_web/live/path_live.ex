@@ -15,7 +15,7 @@ defmodule LeapWeb.PathLive do
 
     path_component =
       live_component(socket, LeapWeb.Components.EditPath,
-        id: "edit_path" <> to_string(path_id),
+        id: "edit_path_" <> to_string(path_id),
         path: path
       )
 
@@ -27,7 +27,7 @@ defmodule LeapWeb.PathLive do
 
     path_component =
       live_component(socket, LeapWeb.Components.ShowPath,
-        id: "edit_path" <> to_string(path_id),
+        id: "show_path_" <> to_string(path_id),
         path: path
       )
 
