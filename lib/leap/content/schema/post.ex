@@ -7,6 +7,7 @@ defmodule Leap.Content.Schema.Post do
   alias Leap.Content.Posts
 
   defenum StateEnum, ["new", "draft", "published"]
+  defenum TypeEnum, ["question", "learn_path"]
 
   defmodule StateMachine do
     @moduledoc "State machine for post. See Machinary docs for guards or callbacks if needed"
@@ -33,6 +34,7 @@ defmodule Leap.Content.Schema.Post do
   schema "posts" do
     field :title, :string
     field :body, :string
+    field :type, TypeEnum
     field :state, StateEnum, default: "new"
 
     timestamps()
@@ -47,7 +49,7 @@ defmodule Leap.Content.Schema.Post do
   def changeset_publish(post, attrs) do
     post
     |> cast(attrs, [:title, :body])
-    |> validate_required([:title, :body])
+    |> validate_required([:title, :body, :type])
     |> strip_html_tags(:body)
   end
 

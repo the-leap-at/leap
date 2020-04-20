@@ -5,7 +5,8 @@ defmodule Leap.Repo.Migrations.CreatePostsTable do
     create table(:posts) do
       add :title, :string
       add :body, :text
-      add :state, :text, null: false, default: "new"
+      add :state, :string, null: false, default: "new"
+      add :type, :string, null: false
 
       timestamps()
     end

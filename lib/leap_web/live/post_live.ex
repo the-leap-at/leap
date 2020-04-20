@@ -11,7 +11,7 @@ defmodule LeapWeb.PostLive do
   end
 
   def handle_params(%{"post_id" => post_id, "action" => "edit"}, _uri, socket) do
-    post = Answers.get!(Post, post_id)
+    post = Content.get!(Post, post_id)
 
     post_component =
       live_component(socket, LeapWeb.Components.EditPost,
@@ -23,7 +23,7 @@ defmodule LeapWeb.PostLive do
   end
 
   def handle_params(%{"post_id" => post_id}, _uri, socket) do
-    post = Answers.get!(Post, post_id)
+    post = Content.get!(Post, post_id)
 
     post_component =
       live_component(socket, LeapWeb.Components.ShowPost,

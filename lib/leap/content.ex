@@ -1,5 +1,5 @@
 defmodule Leap.Content do
-  @moduledoc "The Answers context"
+  @moduledoc "The Content context"
 
   use Leap, :context
 

@@ -26,9 +26,9 @@ defmodule LeapWeb.Components.EditPost do
   end
 
   def update(%{action: :update_post, params: post_params}, %{assigns: %{state: state}} = socket) do
-    case Answers.update_post(state.post, post_params) do
+    case Content.update_post(state.post, post_params) do
       {:ok, post} ->
-        state = %State{state | post: post, post_changeset: Answers.change_post(post)}
+        state = %State{state | post: post, post_changeset: Content.change_post(post)}
 
         {:ok, assign(socket, :state, state)}
 
@@ -43,7 +43,7 @@ defmodule LeapWeb.Components.EditPost do
     state = %State{
       component_id: component_id,
       post: post,
-      post_changeset: Answers.change_post(post)
+      post_changeset: Content.change_post(post)
     }
 
     {:ok, assign(socket, :state, state)}
@@ -52,7 +52,7 @@ defmodule LeapWeb.Components.EditPost do
   @doc "Live updates a draft post"
   def handle_event("update_post", %{"post" => post_params}, %{assigns: %{state: state}} = socket) do
     case state.post do
-      %Post{state: state} when state in [:new, :draft] ->
+      %Post{state: post_state} when post_state in [:new, :draft] ->
         send(
           self(),
           {:perform_action, {__MODULE__, state.component_id, :update_post, post_params}}
@@ -61,7 +61,7 @@ defmodule LeapWeb.Components.EditPost do
         {:noreply, socket}
 
       %Post{state: :published} ->
-        post = Answers.validate_publish_post(state.post, post_params)
+        post = Content.validate_publish_post(state.post, post_params)
         state = %State{state | post_changeset: post}
 
         {:noreply, assign(socket, :state, state)}
@@ -70,11 +70,11 @@ defmodule LeapWeb.Components.EditPost do
 
   @doc "Publish a draft post or already published post (edit)"
   def handle_event("publish_post", %{"post" => post_params}, %{assigns: %{state: state}} = socket) do
-    case Answers.publish_post(state.post, post_params) do
+    case Content.publish_post(state.post, post_params) do
       {:ok, post} ->
-        state = %State{state | post: post, post_changeset: Answers.change_post(post)}
+        state = %State{state | post: post, post_changeset: Content.change_post(post)}
         socket = assign(socket, :state, state)
-        {:noreply, push_patch(socket, to: Routes.live_post(socket, LeapWeb.PostLive, post.id))}
+        {:noreply, push_patch(socket, to: Routes.live_path(socket, LeapWeb.PostLive, post.id))}
 
       {:error, changeset} ->
         state = %State{state | post_changeset: changeset}

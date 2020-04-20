@@ -5,7 +5,7 @@
       <%= text_input f, :title,
       phx_debounce: @state.debounce,
       class: "input is-large",
-      placeholder: "PATH TITLE"
+      placeholder: "TITLE"
       %>
     </div>
     <%= error_tag f, :title %>
@@ -19,7 +19,7 @@
       </div>
     <% end %>
     <div class="control is-expanded">
-      <%= submit "SAVE", phx_disable_with: "Saving...",
+      <%= submit "PUBLISH", phx_disable_with: "Saving...",
       class: "button is-primary is-small is-fullwidth" %>
     </div>
   </div>
