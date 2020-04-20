@@ -10,5 +10,8 @@ defmodule Leap.Repo.Migrations.CreatePostsTable do
 
       timestamps()
     end
+
+    create index(:posts, [:state])
+    create index(:posts, [:type])
   end
 end

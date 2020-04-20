@@ -4,6 +4,7 @@ defmodule Leap.Content.Schema.Post do
   use Leap, :schema
   import EctoEnum
 
+  alias __MODULE__
   alias Leap.Content.Posts
 
   defenum StateEnum, ["new", "draft", "published"]
@@ -36,6 +37,16 @@ defmodule Leap.Content.Schema.Post do
     field :body, :string
     field :type, TypeEnum
     field :state, StateEnum, default: "new"
+
+    many_to_many(:children, Post,
+      join_through: "post_relations",
+      join_keys: [parent_id: :id, child_id: :id]
+    )
+
+    many_to_many(:parents, Post,
+      join_through: "post_relations",
+      join_keys: [child_id: :id, parent_id: :id]
+    )
 
     timestamps()
   end
