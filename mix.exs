@@ -36,7 +36,7 @@ defmodule Leap.MixProject do
       {:phoenix, "~> 1.4.16"},
       {:phoenix_pubsub, "~> 1.1"},
       {:phoenix_ecto, "~> 4.0"},
-      {:phoenix_live_view, "~> 0.10.0"},
+      {:phoenix_live_view, "~> 0.12.0"},
       {:ecto_sql, "~> 3.1"},
       {:ecto_enum, "~> 1.4"},
       {:postgrex, ">= 0.0.0"},
@@ -45,7 +45,11 @@ defmodule Leap.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:floki, ">= 0.0.0", only: :test}
+      {:floki, ">= 0.0.0", only: :test},
+      {:typed_struct, "~> 0.1.4"},
+      {:machinery, "~> 1.0.0"},
+      {:html_sanitize_ex, "~> 1.3.0"},
+      {:earmark, "~> 1.4.3"}
     ]
   end
 

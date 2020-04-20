@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 # Configure your database
 config :leap, Leap.Repo,
@@ -60,7 +60,7 @@ config :leap, LeapWeb.Endpoint,
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/leap_web/(live|views)/.*(ex)$",
+      ~r"lib/leap_web/(components|live|views)/.*(ex)$",
       ~r"lib/leap_web/templates/.*(eex)$"
     ]
   ]

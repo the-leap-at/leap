@@ -8,7 +8,7 @@ defmodule LeapWeb.Router do
     plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug :put_root_layout, {LeapWeb.LayoutView, :app}
+    plug :put_root_layout, {LeapWeb.LayoutView, :root}
   end
 
   pipeline :api do
@@ -18,7 +18,8 @@ defmodule LeapWeb.Router do
   scope "/", LeapWeb do
     pipe_through :browser
 
-    live "/", TempLive
+    live "/path/:path_id", PathLive
+    live "/path/:path_id/:action", PathLive
   end
 
   # Other scopes may use custom stacks.
