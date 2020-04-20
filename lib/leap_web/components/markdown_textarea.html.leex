@@ -10,11 +10,11 @@
       phx_window_keyup: :store_value,
       phx_target: "#"<>@state.component_id %>
     </div>
-    <%= error_tag @state.form, :content %>
+    <%= error_tag @state.form, :body %>
   <% end %>
   <%= if show_preview(@state) do %>
     <button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @state.component_id %>">Edit</button>
-    <div class="content">
+    <div class="body">
       <%= markdown_to_html(@state.value) %>
     </div>
   <% end %>

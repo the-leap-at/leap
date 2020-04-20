@@ -32,7 +32,7 @@ defmodule Leap.Answers.Schema.Path do
 
   schema "paths" do
     field :title, :string
-    field :content, :string
+    field :body, :string
     field :state, StateEnum, default: "new"
 
     timestamps()
@@ -40,15 +40,15 @@ defmodule Leap.Answers.Schema.Path do
 
   def changeset_update(path, attrs) do
     path
-    |> cast(attrs, [:title, :content])
-    |> strip_html_tags(:content)
+    |> cast(attrs, [:title, :body])
+    |> strip_html_tags(:body)
   end
 
   def changeset_publish(path, attrs) do
     path
-    |> cast(attrs, [:title, :content])
-    |> validate_required([:title, :content])
-    |> strip_html_tags(:content)
+    |> cast(attrs, [:title, :body])
+    |> validate_required([:title, :body])
+    |> strip_html_tags(:body)
   end
 
   def changeset_state_transition(path, attrs) do

@@ -86,11 +86,11 @@ defmodule LeapWeb.Components.EditPath do
 
   defp markdown_textarea(form, state, socket) do
     live_component(socket, LeapWeb.Components.MarkdownTextarea,
-      id: "#{state.component_id}_content",
+      id: "#{state.component_id}_body",
       debounce: state.debounce,
       form: form,
-      field: :content,
-      value: state.path.content
+      field: :body,
+      value: state.path.body
     )
   end
 end
