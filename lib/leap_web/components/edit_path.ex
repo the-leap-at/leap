@@ -1,7 +1,6 @@
 defmodule LeapWeb.Components.EditPath do
   @moduledoc """
-  - Updates paths
-
+  - Edit paths
   """
   use LeapWeb, :component
   use TypedStruct
