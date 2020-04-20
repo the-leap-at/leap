@@ -1,15 +1,15 @@
-defmodule Leap.Answers.Schema.Path do
-  @moduledoc "Path schema"
+defmodule Leap.Content.Schema.Post do
+  @moduledoc "Post schema"
 
   use Leap, :schema
   import EctoEnum
 
-  alias Leap.Answers.Paths
+  alias Leap.Content.Posts
 
   defenum StateEnum, ["new", "draft", "published"]
 
   defmodule StateMachine do
-    @moduledoc "State machine for path. See Machinary docs for guards or callbacks if needed"
+    @moduledoc "State machine for post. See Machinary docs for guards or callbacks if needed"
     use Machinery,
       states: StateEnum.__valid_values__(),
       transitions: %{
@@ -17,20 +17,20 @@ defmodule Leap.Answers.Schema.Path do
         draft: :published
       }
 
-    def guard_transition(path, "published") do
+    def guard_transition(post, "published") do
       # TODO here I can check the validity of the changeset before publishing
       # probably need to return a map of errors , to handle also the steps, or missing categories, etc
-      path
+      post
     end
 
-    def persist(path, next_state) do
-      Paths.update_path_state!(path, next_state)
+    def persist(post, next_state) do
+      Posts.update_post_state!(post, next_state)
     end
   end
 
   @type t() :: %__MODULE__{}
 
-  schema "paths" do
+  schema "posts" do
     field :title, :string
     field :body, :string
     field :state, StateEnum, default: "new"
@@ -38,27 +38,27 @@ defmodule Leap.Answers.Schema.Path do
     timestamps()
   end
 
-  def changeset_update(path, attrs) do
-    path
+  def changeset_update(post, attrs) do
+    post
     |> cast(attrs, [:title, :body])
     |> strip_html_tags(:body)
   end
 
-  def changeset_publish(path, attrs) do
-    path
+  def changeset_publish(post, attrs) do
+    post
     |> cast(attrs, [:title, :body])
     |> validate_required([:title, :body])
     |> strip_html_tags(:body)
   end
 
-  def changeset_state_transition(path, attrs) do
-    path
+  def changeset_state_transition(post, attrs) do
+    post
     |> cast(attrs, [:state])
     |> validate_required([:state])
   end
 
-  def changeset_state_transition_error(path, attrs, error) do
-    path
+  def changeset_state_transition_error(post, attrs, error) do
+    post
     |> cast(attrs, [:state])
     |> validate_required([:state])
     |> add_error(:state, error)

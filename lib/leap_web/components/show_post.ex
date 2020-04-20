@@ -1,19 +1,19 @@
-defmodule LeapWeb.Components.ShowPath do
+defmodule LeapWeb.Components.ShowPost do
   @moduledoc """
-  - Shows paths
+  - Shows posts
   """
   use LeapWeb, :component
   use TypedStruct
 
-  alias Leap.Answers.Schema.Path
+  alias Leap.Content.Schema.Post
 
   defmodule State do
     @moduledoc false
 
-    @typedoc "ShowPath Component state"
+    @typedoc "ShowPost Component state"
     typedstruct do
       field :component_id, String.t(), enforce: true
-      field :path, Path.t(), enforce: true
+      field :post, Post.t(), enforce: true
     end
   end
 
@@ -21,10 +21,10 @@ defmodule LeapWeb.Components.ShowPath do
     {:ok, socket}
   end
 
-  def update(%{id: component_id, path: path}, socket) do
+  def update(%{id: component_id, post: post}, socket) do
     state = %State{
       component_id: component_id,
-      path: path
+      post: post
     }
 
     {:ok, assign(socket, :state, state)}
