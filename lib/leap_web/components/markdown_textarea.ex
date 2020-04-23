@@ -28,11 +28,13 @@ defmodule LeapWeb.Components.MarkdownTextarea do
   end
 
   def update(assigns, socket) do
+    value = assigns.form.params[to_string(assigns.field)] || assigns.value
+
     state = %State{
       component_id: assigns.id,
       form: assigns.form,
       field: assigns.field,
-      value: assigns.value
+      value: value
     }
 
     state = add_debounce(assigns, state)
@@ -50,17 +52,14 @@ defmodule LeapWeb.Components.MarkdownTextarea do
     {:noreply, assign(socket, :state, state)}
   end
 
-  def show_edit(state) do
-    not state.preview
-  end
-
-  def show_preview(state) do
-    state.preview
-  end
-
   defp add_debounce(%{debounce: debounce}, %State{} = state) when is_integer(debounce) do
     %State{state | debounce: debounce}
   end
 
   defp add_debounce(_assings, state), do: state
+
+  # hide the textarea while in preview mode, but to be still part of the form
+  defp hidden(preview) do
+    if preview, do: "is-hidden"
+  end
 end
