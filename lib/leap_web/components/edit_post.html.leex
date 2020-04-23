@@ -10,7 +10,7 @@
     </div>
     <%= error_tag f, :title %>
   </div>
-  <%= markdown_textarea(f, @state, @socket) %>
+  <%= markdown_textarea_component(f, @state, @socket) %>
   <div class="field is-grouped">
     <%= if @state.post.state == :draft do %>
       <div class="control">

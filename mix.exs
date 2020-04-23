@@ -49,7 +49,8 @@ defmodule Leap.MixProject do
       {:typed_struct, "~> 0.1.4"},
       {:machinery, "~> 1.0.0"},
       {:html_sanitize_ex, "~> 1.3.0"},
-      {:earmark, "~> 1.4.3"}
+      {:earmark, "~> 1.4.3"},
+      {:timex, "~> 3.5"}
     ]
   end
 

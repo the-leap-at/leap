@@ -25,6 +25,7 @@ defmodule LeapWeb.Components.EditPost do
     {:ok, socket}
   end
 
+  # TODO: move the update in the handle event. We do not need to go throught the liveview
   def update(%{action: :update_post, params: post_params}, %{assigns: %{state: state}} = socket) do
     case Content.update_post(state.post, post_params) do
       {:ok, post} ->
@@ -82,7 +83,7 @@ defmodule LeapWeb.Components.EditPost do
     end
   end
 
-  defp markdown_textarea(form, state, socket) do
+  defp markdown_textarea_component(form, state, socket) do
     live_component(socket, LeapWeb.Components.MarkdownTextarea,
       id: "#{state.component_id}_body",
       debounce: state.debounce,

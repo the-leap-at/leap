@@ -1,21 +1,20 @@
 <div class="field" id="<%= @state.component_id %>">
-  <%= if show_edit(@state) do %>
+  <%= if @state.preview do %>
+    <button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @state.component_id %>">Edit</button>
+    <div class="content">
+      <%= markdown_to_html(@state.value) %>
+    </div>
+  <% else %>
     <button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @state.component_id %>">Preview</button>
-    <div class="control">
-      <%= textarea  @state.form, @state.field,
+  <% end %>
+  <div class="control">
+    <%= textarea  @state.form, @state.field,
       value: @state.value,
-      class: "textarea",
+      class: "textarea #{hidden(@state.preview)}",
       rows: 12,
       phx_debounce: @state.debounce,
       phx_window_keyup: :store_value,
       phx_target: "#"<>@state.component_id %>
-    </div>
-    <%= error_tag @state.form, :body %>
-  <% end %>
-  <%= if show_preview(@state) do %>
-    <button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @state.component_id %>">Edit</button>
-    <div class="body">
-      <%= markdown_to_html(@state.value) %>
-    </div>
-  <% end %>
+  </div>
+  <%= error_tag @state.form, :body %>
 </div>
