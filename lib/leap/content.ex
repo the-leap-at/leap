@@ -3,10 +3,7 @@ defmodule Leap.Content do
 
   use Leap, :context
 
-  alias Leap.Content.Schema.Post
   alias Leap.Content.Posts
-
-  @type schema() :: Post.t()
 
   ## PATH ##
   defdelegate update_post(post, attrs), to: Posts

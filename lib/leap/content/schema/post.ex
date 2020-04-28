@@ -6,6 +6,7 @@ defmodule Leap.Content.Schema.Post do
 
   alias __MODULE__
   alias Leap.Content.Posts
+  alias Leap.Group.Schema.Category
 
   defenum StateEnum, ["new", "draft", "published"]
   defenum TypeEnum, ["question", "learn_path"]
@@ -42,6 +43,8 @@ defmodule Leap.Content.Schema.Post do
       join_through: "post_relations",
       join_keys: [parent_id: :id, child_id: :id]
     )
+
+    has_one :category, {"posts_categories", Category}
 
     many_to_many(:parents, Post,
       join_through: "post_relations",

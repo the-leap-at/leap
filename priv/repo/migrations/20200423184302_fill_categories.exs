@@ -29,9 +29,14 @@ defmodule Leap.Repo.Migrations.FillCategories do
       ('politics', now(), now()),
       ('other', now(), now());
     """)
+
+    execute("""
+    CREATE INDEX categories_trgm_index ON categories USING GIN (to_tsvector('english', coalesce(name, ' ')))
+    """)
   end
 
   def down do
+    execute("DROP INDEX users_trgm_idx")
     nil
   end
 end
