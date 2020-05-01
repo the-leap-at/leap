@@ -27,7 +27,7 @@ defmodule Leap.Content.Schema.Post do
     end
 
     def persist(post, next_state) do
-      Posts.update_post_state!(post, next_state)
+      Posts.update_state!(post, next_state)
     end
   end
 

@@ -21,7 +21,7 @@ defmodule Leap.Group.Categories do
     |> Repo.all()
   end
 
-  # allow search by partial word
+  # allow search by partial words
   defp format_search_term(term) do
     term =
       term

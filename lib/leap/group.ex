@@ -6,5 +6,5 @@ defmodule Leap.Group do
   alias Leap.Group.Categories
 
   ## CATEGORY ##
-  defdelegate search_group(term), to: Categories, as: :search
+  defdelegate search_category(term), to: Categories, as: :search
 end
