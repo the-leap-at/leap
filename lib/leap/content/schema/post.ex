@@ -7,6 +7,7 @@ defmodule Leap.Content.Schema.Post do
   alias __MODULE__
   alias Leap.Content.Posts
   alias Leap.Group.Schema.Category
+  alias Leap.Group.Schema.PostCategory
 
   defenum StateEnum, ["new", "draft", "published"]
   defenum TypeEnum, ["question", "learn_path"]
@@ -44,12 +45,16 @@ defmodule Leap.Content.Schema.Post do
       join_keys: [parent_id: :id, child_id: :id]
     )
 
-    has_one :category, {"posts_categories", Category}
-
     many_to_many(:parents, Post,
       join_through: "post_relations",
       join_keys: [child_id: :id, parent_id: :id]
     )
+
+    # We don't really need this association but it is an workaround to define a `one_to_many` with join table kind of relation
+    # TODO: look for better options
+    has_one :post_category, PostCategory
+
+    has_one :category, through: [:post_category, :category]
 
     timestamps()
   end

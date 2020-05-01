@@ -1,27 +1,28 @@
-<div id="<%= @state.component_id%>">
-  <%= f =  form_for @state.post_changeset, "#", [phx_change: :update_post, phx_submit: :publish_post, phx_target: "#"<>@state.component_id] %>
-  <div class="field">
-    <div class="control">
-      <%= text_input f, :title,
+<div id="<%= @state.component_id %>">
+	<%= edit_category_component(@categories, @state, @socket) %>
+	<%= f =  form_for @state.post_changeset, "#", [phx_change: :update_post, phx_submit: :publish_post, phx_target: "#"<>@state.component_id] %>
+	<div class="field">
+		<div class="control">
+			<%= text_input f, :title,
       phx_debounce: @state.debounce,
       class: "input is-large",
       placeholder: "TITLE"
       %>
-    </div>
-    <%= error_tag f, :title %>
-  </div>
-  <%= markdown_textarea_component(f, @state, @socket) %>
-  <div class="field is-grouped">
-    <%= if @state.post.state == :draft do %>
-      <div class="control">
-        <div class="bloom-changed">saved as draft</div>
-        <div class="bloom-changing">saving...</div>
-      </div>
-    <% end %>
-    <div class="control is-expanded">
-      <%= submit "PUBLISH", phx_disable_with: "Saving...",
+		</div>
+		<%= error_tag f, :title %>
+	</div>
+	<%= markdown_textarea_component(f, @state, @socket) %>
+	<div class="field is-grouped">
+		<%= if @state.post.state == :draft do %>
+			<div class="control">
+				<div class="bloom-changed">saved as draft</div>
+				<div class="bloom-changing">saving...</div>
+			</div>
+		<% end %>
+		<div class="control is-expanded">
+			<%= submit "PUBLISH", phx_disable_with: "Saving...",
       class: "button is-primary is-small is-fullwidth" %>
-    </div>
-  </div>
+		</div>
+	</div>
 </form>
 </div>

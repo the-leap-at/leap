@@ -22,7 +22,7 @@ defmodule LeapWeb.Components.EditPost do
   end
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [categories: []]}
   end
 
   # TODO: move the update in the handle event. We do not need to go throught the liveview
@@ -40,14 +40,14 @@ defmodule LeapWeb.Components.EditPost do
     end
   end
 
-  def update(%{id: component_id, post: post}, socket) do
+  def update(%{id: component_id, post: post, categories: categories}, socket) do
     state = %State{
       component_id: component_id,
       post: post,
       post_changeset: Content.change_post(post)
     }
 
-    {:ok, assign(socket, :state, state)}
+    {:ok, assign(socket, %{state: state, categories: categories})}
   end
 
   @doc "Live updates a draft post"
@@ -90,6 +90,14 @@ defmodule LeapWeb.Components.EditPost do
       form: form,
       field: :body,
       value: state.post.body
+    )
+  end
+
+  defp edit_category_component(categories, state, socket) do
+    live_component(socket, LeapWeb.Components.EditPost.EditCategory,
+      id: "#{state.component_id}_category",
+      post: state.post,
+      categories: categories
     )
   end
 end
