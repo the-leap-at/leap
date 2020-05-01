@@ -1,6 +1,6 @@
 <div id="<%= @state.component_id %>">
-	<%= edit_category_component(@categories, @state, @socket) %>
 	<%= f =  form_for @state.post_changeset, "#", [phx_change: :update_post, phx_submit: :publish_post, phx_target: "#"<>@state.component_id] %>
+	<%= edit_category_component(f, @state, @socket) %>
 	<div class="field">
 		<div class="control">
 			<%= text_input f, :title,

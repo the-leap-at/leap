@@ -2,10 +2,10 @@ defmodule Leap.Repo.Migrations.AddPostgresExtensions do
   use Ecto.Migration
 
   def up do
-    execute("CREATE EXTENSION pg_trgm")
+    execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
   end
 
   def down do
-    execute("DROP EXTENSION pg_trgm")
+    execute("DROP EXTENSION IF EXISTS pg_trgm")
   end
 end

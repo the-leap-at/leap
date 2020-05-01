@@ -8,7 +8,7 @@ defmodule Leap.Group.Schema.Category do
 
   schema "categories" do
     field :name, :string
-    many_to_many :posts, Post, join_through: "posts_categories"
+    has_many :posts, Post
 
     timestamps()
   end

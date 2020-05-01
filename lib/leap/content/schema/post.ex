@@ -7,7 +7,6 @@ defmodule Leap.Content.Schema.Post do
   alias __MODULE__
   alias Leap.Content.Posts
   alias Leap.Group.Schema.Category
-  alias Leap.Group.Schema.PostCategory
 
   defenum StateEnum, ["new", "draft", "published"]
   defenum TypeEnum, ["question", "learn_path"]
@@ -40,35 +39,31 @@ defmodule Leap.Content.Schema.Post do
     field :type, TypeEnum
     field :state, StateEnum, default: "new"
 
-    many_to_many(:children, Post,
+    many_to_many :children, Post,
       join_through: "post_relations",
       join_keys: [parent_id: :id, child_id: :id]
-    )
 
-    many_to_many(:parents, Post,
+    many_to_many :parents, Post,
       join_through: "post_relations",
       join_keys: [child_id: :id, parent_id: :id]
-    )
 
-    # We don't really need this association but it is an workaround to define a `one_to_many` with join table kind of relation
-    # TODO: look for better options
-    has_one :post_category, PostCategory
-
-    has_one :category, through: [:post_category, :category]
+    belongs_to :category, Category, on_replace: :delete
 
     timestamps()
   end
 
   def changeset_update(post, attrs) do
     post
-    |> cast(attrs, [:title, :body])
+    |> cast(attrs, [:title, :body, :category_id])
+    |> assoc_constraint(:category)
     |> strip_html_tags(:body)
   end
 
   def changeset_publish(post, attrs) do
     post
     |> cast(attrs, [:title, :body])
-    |> validate_required([:title, :body, :type])
+    |> validate_required([:title, :body, :type, :category_id])
+    |> assoc_constraint(:category)
     |> strip_html_tags(:body)
   end
 

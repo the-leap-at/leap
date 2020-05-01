@@ -60,11 +60,12 @@ defmodule Leap.Content.Posts do
   defp transition_state_to_published(%Post{state: :published} = post), do: {:ok, post}
   defp transition_state_to_published(post), do: transition_state_to(post, :published)
 
-  def category(%Post{} = post, %Category{} = category) do
+  @spec update_category!(Post.t(), Category.t()) :: Post.t()
+  def update_category!(%Post{} = post, %Category{} = category) do
     post
     |> Ecto.Changeset.change()
     |> Ecto.Changeset.put_assoc(:category, category)
-    |> Repo.update()
+    |> Repo.update!()
   end
 
   @spec validate_publish(Post.t()) :: Ecto.Changeset.t(Post.t())

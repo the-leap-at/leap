@@ -19,9 +19,13 @@ defmodule Leap do
       @spec all(Ecto.Queryable.t()) :: [Ecto.Schema.t()]
       def all(queryable), do: Repo.all(queryable)
 
-      @spec with_preloads([Ecto.Schema.t()] | Ecto.Schema.t() | nil, Keyword.t() | list()) ::
+      @spec with_preloads(
+              [Ecto.Schema.t()] | Ecto.Schema.t() | nil,
+              Keyword.t() | list(),
+              Keyword.t()
+            ) ::
               [Ecto.Schema.t()] | Ecto.Schema.t() | nil
-      def with_preloads(schema, preloads), do: Repo.preload(schema, preloads)
+      def with_preloads(schema, preloads, opts \\ []), do: Repo.preload(schema, preloads, opts)
     end
   end
 

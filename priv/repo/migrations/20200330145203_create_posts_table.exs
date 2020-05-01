@@ -8,6 +8,8 @@ defmodule Leap.Repo.Migrations.CreatePostsTable do
       add :state, :string, null: false, default: "new"
       add :type, :string, null: false
 
+      add :category_id, references(:categories)
+
       timestamps()
     end
 

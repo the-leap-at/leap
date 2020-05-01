@@ -22,17 +22,33 @@ defmodule LeapWeb.Components.EditPost do
   end
 
   def mount(socket) do
-    {:ok, socket, temporary_assigns: [categories: []]}
+    {:ok, socket}
   end
 
-  def update(%{id: component_id, post: post, categories: categories}, socket) do
+  # This is called also from other sub-components
+  def update(%{action: :update_post, params: post_params}, %{assigns: %{state: state}} = socket) do
+    case Content.update_post(state.post, post_params) do
+      {:ok, post} ->
+        post = Content.with_preloads(post, [:category], force: true)
+        state = %State{state | post: post, post_changeset: Content.change_post(post)}
+
+        {:ok, assign(socket, :state, state)}
+
+      {:error, changeset} ->
+        state = %State{state | post_changeset: changeset}
+
+        {:ok, assign(socket, :state, state)}
+    end
+  end
+
+  def update(%{id: component_id, post: post}, socket) do
     state = %State{
       component_id: component_id,
       post: post,
       post_changeset: Content.change_post(post)
     }
 
-    {:ok, assign(socket, %{state: state, categories: categories})}
+    {:ok, assign(socket, %{state: state})}
   end
 
   @doc "Live updates a draft post"
@@ -42,23 +58,18 @@ defmodule LeapWeb.Components.EditPost do
         %{assigns: %{state: %{post: %Post{state: post_state}} = state}} = socket
       )
       when post_state in [:new, :draft] do
-    case Content.update_post(state.post, post_params) do
-      {:ok, post} ->
-        state = %State{state | post: post, post_changeset: Content.change_post(post)}
+    send(
+      self(),
+      {:perform_action, {__MODULE__, state.component_id, :update_post, post_params}}
+    )
 
-        {:noreply, assign(socket, :state, state)}
-
-      {:error, changeset} ->
-        state = %State{state | post_changeset: changeset}
-
-        {:noreply, assign(socket, :state, state)}
-    end
+    {:noreply, socket}
   end
 
   def handle_event(
         "update_post",
         %{"post" => post_params},
-        %{assigns: %{state: %{post: %Post{state: :publised}} = state}} = socket
+        %{assigns: %{state: %{post: %Post{state: :published}} = state}} = socket
       ) do
     post = Content.validate_publish_post(state.post, post_params)
     state = %State{state | post_changeset: post}
@@ -90,11 +101,12 @@ defmodule LeapWeb.Components.EditPost do
     )
   end
 
-  defp edit_category_component(categories, state, socket) do
+  defp edit_category_component(form, state, socket) do
     live_component(socket, LeapWeb.Components.EditPost.EditCategory,
       id: "#{state.component_id}_category",
-      post: state.post,
-      categories: categories
+      edit_post_component_id: state.component_id,
+      form: form,
+      post: state.post
     )
   end
 end
