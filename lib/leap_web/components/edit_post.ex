@@ -25,21 +25,6 @@ defmodule LeapWeb.Components.EditPost do
     {:ok, socket, temporary_assigns: [categories: []]}
   end
 
-  # TODO: move the update in the handle event. We do not need to go throught the liveview
-  def update(%{action: :update_post, params: post_params}, %{assigns: %{state: state}} = socket) do
-    case Content.update_post(state.post, post_params) do
-      {:ok, post} ->
-        state = %State{state | post: post, post_changeset: Content.change_post(post)}
-
-        {:ok, assign(socket, :state, state)}
-
-      {:error, changeset} ->
-        state = %State{state | post_changeset: changeset}
-
-        {:ok, assign(socket, :state, state)}
-    end
-  end
-
   def update(%{id: component_id, post: post, categories: categories}, socket) do
     state = %State{
       component_id: component_id,
@@ -51,22 +36,34 @@ defmodule LeapWeb.Components.EditPost do
   end
 
   @doc "Live updates a draft post"
-  def handle_event("update_post", %{"post" => post_params}, %{assigns: %{state: state}} = socket) do
-    case state.post do
-      %Post{state: post_state} when post_state in [:new, :draft] ->
-        send(
-          self(),
-          {:perform_action, {__MODULE__, state.component_id, :update_post, post_params}}
-        )
+  def handle_event(
+        "update_post",
+        %{"post" => post_params},
+        %{assigns: %{state: %{post: %Post{state: post_state}} = state}} = socket
+      )
+      when post_state in [:new, :draft] do
+    case Content.update_post(state.post, post_params) do
+      {:ok, post} ->
+        state = %State{state | post: post, post_changeset: Content.change_post(post)}
 
-        {:noreply, socket}
+        {:noreply, assign(socket, :state, state)}
 
-      %Post{state: :published} ->
-        post = Content.validate_publish_post(state.post, post_params)
-        state = %State{state | post_changeset: post}
+      {:error, changeset} ->
+        state = %State{state | post_changeset: changeset}
 
         {:noreply, assign(socket, :state, state)}
     end
+  end
+
+  def handle_event(
+        "update_post",
+        %{"post" => post_params},
+        %{assigns: %{state: %{post: %Post{state: :publised}} = state}} = socket
+      ) do
+    post = Content.validate_publish_post(state.post, post_params)
+    state = %State{state | post_changeset: post}
+
+    {:noreply, assign(socket, :state, state)}
   end
 
   @doc "Publish a draft post or already published post (edit)"

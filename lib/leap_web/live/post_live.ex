@@ -9,19 +9,18 @@ defmodule LeapWeb.PostLive do
   alias Leap.Group.Schema.Category
 
   def mount(_params, _session, socket) do
-    categories = Group.all(Category)
-    socket = assign(socket, :categories, categories)
     {:ok, socket, temporary_assigns: [post: nil, post_component: nil, categories: []]}
   end
 
   def handle_params(%{"post_id" => post_id, "action" => "edit"}, _uri, socket) do
     post = get_post(post_id)
+    categories = Group.all(Category)
 
     post_component =
       live_component(socket, LeapWeb.Components.EditPost,
         id: "edit_post_" <> to_string(post_id),
         post: post,
-        categories: socket.assigns.categories
+        categories: categories
       )
 
     {:noreply, assign(socket, post_component: post_component)}
