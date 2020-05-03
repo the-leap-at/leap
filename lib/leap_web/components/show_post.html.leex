@@ -1,8 +1,11 @@
 <div id="<%= @state.component_id %>">
-  <%= updates_component(@state, @socket) %>
-  <h1 class="title"><%= @state.post.title %></h1>
-  <div class="content">
-    <%= markdown_to_html(@state.post.body) %>
-  </div>
-  <%= live_patch "Edit Post", class: "button is-primary is-small is-fullwidth", to: Routes.live_path(@socket, LeapWeb.PostLive, @state.post.id, "edit") %>
+	<div class="subtitle">
+		Category: <%= @state.post.category.name %>
+	</div>
+	<%= updates_component(@state, @socket) %>
+	<h1 class="title"><%= @state.post.title %></h1>
+	<div class="content">
+		<%= markdown_to_html(@state.post.body) %>
+	</div>
+	<%= live_patch "Edit Post", class: "button is-primary is-small is-fullwidth", to: Routes.live_path(@socket, LeapWeb.PostLive, @state.post.id, "edit") %>
 </div>

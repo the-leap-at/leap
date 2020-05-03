@@ -11,26 +11,34 @@ defmodule LeapWeb.PostLive do
   end
 
   def handle_params(%{"post_id" => post_id, "action" => "edit"}, _uri, socket) do
-    post = Content.get!(Post, post_id)
+    post = get_post(post_id)
 
     post_component =
       live_component(socket, LeapWeb.Components.EditPost,
         id: "edit_post_" <> to_string(post_id),
-        post: post
+        post: post,
+        action: [:init]
       )
 
     {:noreply, assign(socket, post_component: post_component)}
   end
 
   def handle_params(%{"post_id" => post_id}, _uri, socket) do
-    post = Content.get!(Post, post_id)
+    post = get_post(post_id)
 
     post_component =
       live_component(socket, LeapWeb.Components.ShowPost,
         id: "show_post_" <> to_string(post_id),
-        post: post
+        post: post,
+        action: [:init]
       )
 
     {:noreply, assign(socket, post_component: post_component)}
+  end
+
+  defp get_post(post_id) do
+    Post
+    |> Content.get!(post_id)
+    |> Content.with_preloads([:category])
   end
 end

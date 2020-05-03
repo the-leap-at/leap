@@ -6,6 +6,7 @@ defmodule Leap.Content.Schema.Post do
 
   alias __MODULE__
   alias Leap.Content.Posts
+  alias Leap.Group.Schema.Category
 
   defenum StateEnum, ["new", "draft", "published"]
   defenum TypeEnum, ["question", "learn_path"]
@@ -26,7 +27,7 @@ defmodule Leap.Content.Schema.Post do
     end
 
     def persist(post, next_state) do
-      Posts.update_post_state!(post, next_state)
+      Posts.update_state!(post, next_state)
     end
   end
 
@@ -38,29 +39,31 @@ defmodule Leap.Content.Schema.Post do
     field :type, TypeEnum
     field :state, StateEnum, default: "new"
 
-    many_to_many(:children, Post,
+    many_to_many :children, Post,
       join_through: "post_relations",
       join_keys: [parent_id: :id, child_id: :id]
-    )
 
-    many_to_many(:parents, Post,
+    many_to_many :parents, Post,
       join_through: "post_relations",
       join_keys: [child_id: :id, parent_id: :id]
-    )
+
+    belongs_to :category, Category, on_replace: :delete
 
     timestamps()
   end
 
   def changeset_update(post, attrs) do
     post
-    |> cast(attrs, [:title, :body])
+    |> cast(attrs, [:title, :body, :category_id])
+    |> assoc_constraint(:category)
     |> strip_html_tags(:body)
   end
 
   def changeset_publish(post, attrs) do
     post
     |> cast(attrs, [:title, :body])
-    |> validate_required([:title, :body, :type])
+    |> validate_required([:title, :body, :type, :category_id])
+    |> assoc_constraint(:category)
     |> strip_html_tags(:body)
   end
 

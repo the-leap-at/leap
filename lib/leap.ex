@@ -10,11 +10,22 @@ defmodule Leap do
   def context do
     quote do
       alias Leap.Repo
-      @spec get(Ecto.Queryable.t(), id :: integer()) :: schema() | nil
+      @spec get(Ecto.Queryable.t(), id :: integer()) :: Ecto.Schema.t() | nil
       def get(queryable, id), do: Repo.get(queryable, id)
 
-      @spec get!(Ecto.Queryable.t(), id :: integer()) :: schema() | nil
+      @spec get!(Ecto.Queryable.t(), id :: integer()) :: Ecto.Schema.t() | nil
       def get!(queryable, id), do: Repo.get(queryable, id)
+
+      @spec all(Ecto.Queryable.t()) :: [Ecto.Schema.t()]
+      def all(queryable), do: Repo.all(queryable)
+
+      @spec with_preloads(
+              [Ecto.Schema.t()] | Ecto.Schema.t() | nil,
+              Keyword.t() | list(),
+              Keyword.t()
+            ) ::
+              [Ecto.Schema.t()] | Ecto.Schema.t() | nil
+      def with_preloads(schema, preloads, opts \\ []), do: Repo.preload(schema, preloads, opts)
     end
   end
 

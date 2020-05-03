@@ -2,7 +2,6 @@ defmodule Leap.Content.Schema.PostRelation do
   @moduledoc "Join Schema holding relations between posts"
 
   use Leap, :schema
-  import EctoEnum
 
   alias Leap.Content.Schema.Post
 

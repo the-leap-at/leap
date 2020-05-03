@@ -1,0 +1,36 @@
+<div class="" id="<%= @state.component_id %>">
+
+	<div class="field">
+		<div class="subtitle">
+			Category: <%= category_name(@state.category) %>
+		</div>
+		<%= error_tag @state.form, :category_id %>
+	</div>
+
+	<%= f =  form_for :category, "#", [phx_change: "search_category", phx_submit: "prevent_submit", phx_target: "#"<>@state.component_id] %>
+	<div class="field">
+		<div class="control">
+			<%= text_input f, :query_term,
+      phx_debounce: @state.debounce,
+      class: "input",
+      placeholder: "category filter",
+			value: @state.value
+      %>
+		</div>
+	</div>
+</form>
+
+<div class="tags">
+	<%= for category <- @state.categories do %>
+		<span
+					class="tag"
+					phx-click="update_category"
+					phx-value-category_id="<%= category.id %>"
+					phx-target="#<%= @state.component_id %>"
+				>
+			<%= category.name %>
+		</span>
+	<% end %>
+</div>
+
+</div>
