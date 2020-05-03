@@ -73,16 +73,16 @@ defmodule LeapWeb do
       alias LeapWeb.Router.Helpers, as: Routes
 
       def handle_info(
-            {:perform_action, {component_module, component_id, action_title, params}},
+            {:perform_action, {component_module, component_id, action_title, payload}},
             socket
           ) do
-        send_update(component_module, id: component_id, action: action_title, params: params)
+        send_update(component_module, id: component_id, action: action_title, payload: payload)
         {:noreply, socket}
       end
 
       def handle_info(
             {:delay_action, delay,
-             {component_module, component_id, action_title, _params} = action},
+             {component_module, component_id, action_title, _payload} = action},
             socket
           ) do
         ref_key =

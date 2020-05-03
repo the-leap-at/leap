@@ -16,7 +16,8 @@ defmodule LeapWeb.PostLive do
     post_component =
       live_component(socket, LeapWeb.Components.EditPost,
         id: "edit_post_" <> to_string(post_id),
-        post: post
+        post: post,
+        action: [:init]
       )
 
     {:noreply, assign(socket, post_component: post_component)}
@@ -28,7 +29,8 @@ defmodule LeapWeb.PostLive do
     post_component =
       live_component(socket, LeapWeb.Components.ShowPost,
         id: "show_post_" <> to_string(post_id),
-        post: post
+        post: post,
+        action: [:init]
       )
 
     {:noreply, assign(socket, post_component: post_component)}

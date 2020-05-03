@@ -59,8 +59,7 @@ defmodule LeapWeb.Components.ShowPost.Updates do
 
         send(
           self(),
-          {:perform_action,
-           {ShowPost, state.show_post_component_id, :refresh_post, %{post: post}}}
+          {:perform_action, {ShowPost, state.show_post_component_id, [post: :refresh], post}}
         )
 
         {:noreply, assign(socket, :state, state)}

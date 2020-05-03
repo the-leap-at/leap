@@ -15,6 +15,7 @@ defmodule LeapWeb.Components.MarkdownTextarea do
     @typedoc "Markdown Texarea Component state"
     typedstruct do
       field :component_id, String.t(), enforce: true
+      field :action, list() | keyword(), default: [:init]
       field :debounce, integer(), default: @debounce
       field :form, Phoenix.HTML.Form.t(), enforce: true
       field :field, String.t(), enforce: true
@@ -42,13 +43,8 @@ defmodule LeapWeb.Components.MarkdownTextarea do
     {:ok, assign(socket, :state, state)}
   end
 
-  def handle_event("store_value", %{"value" => value}, %{assigns: %{state: state}} = socket) do
-    state = %State{state | value: value}
-    {:noreply, assign(socket, :state, state)}
-  end
-
   def handle_event("switch_preview", _params, %{assigns: %{state: state}} = socket) do
-    state = %State{state | preview: not state.preview}
+    state = %State{state | action: [preview: :switch], preview: not state.preview}
     {:noreply, assign(socket, :state, state)}
   end
 
