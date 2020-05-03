@@ -5,8 +5,6 @@ defmodule LeapWeb.PostLive do
 
   alias Leap.Content
   alias Leap.Content.Schema.Post
-  alias Leap.Group
-  alias Leap.Group.Schema.Category
 
   def mount(_params, _session, socket) do
     {:ok, socket, temporary_assigns: [post: nil, post_component: nil]}

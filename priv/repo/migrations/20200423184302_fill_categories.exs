@@ -21,7 +21,7 @@ defmodule Leap.Repo.Migrations.FillCategories do
       ('travel', now(), now()),
       ('business', now(), now()),
       ('services', now(), now()),
-      ('fiance', now(), now()),
+      ('finance', now(), now()),
       ('legal', now(), now()),
       ('management', now(), now()),
       ('marketing', now(), now()),

@@ -63,6 +63,15 @@ defmodule LeapWeb.Components.EditPost.EditCategory do
   end
 
   def handle_event(
+        "search_category",
+        _params,
+        %{assigns: %{state: state}} = socket
+      ) do
+    state = %State{state | categories: Group.all(Category)}
+    {:noreply, assign(socket, :state, state)}
+  end
+
+  def handle_event(
         "update_category",
         %{"category_id" => category_id},
         %{assigns: %{state: state}} = socket
@@ -75,15 +84,6 @@ defmodule LeapWeb.Components.EditPost.EditCategory do
     )
 
     {:noreply, socket}
-  end
-
-  def handle_event(
-        "search_category",
-        _params,
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = %State{state | categories: Group.all(Category)}
-    {:noreply, assign(socket, :state, state)}
   end
 
   def handle_event(_catch_all, _params, socket) do
