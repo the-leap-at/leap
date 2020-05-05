@@ -5,83 +5,46 @@ defmodule LeapWeb.Components.ShowPost.Updates do
   use LeapWeb, :component
   use TypedStruct
 
-  alias LeapWeb.Components.ShowPost
-  alias Leap.Content
-  alias Leap.Content.Schema.Post
-
-  defmodule State do
-    @moduledoc false
-    @debounce 1000
-
-    @typedoc "Update Component state"
-    typedstruct do
-      field :component_id, String.t(), enforce: true
-      field :show_post_component_id, String.t(), enforce: true
-      field :debounce, integer(), default: @debounce
-      field :post, Post.t(), enforce: true
-      field :post_changeset, Ecto.Changeset.t(Post.t())
-      field :body, String.t() | nil, default: nil
-      field :edit, boolean(), default: false
-    end
-  end
-
   def mount(socket) do
     {:ok, socket}
   end
 
   def update(assigns, socket) do
-    state = %State{
-      component_id: assigns.id,
-      show_post_component_id: assigns.show_post_component_id,
-      post: assigns.post,
-      post_changeset: Content.change_post(assigns.post)
-    }
+    form =
+      form_for(assigns.state.post_changeset, "#",
+        phx_submit: "publish_update",
+        phx_target: "#" <> assigns.id
+      )
 
-    {:ok, assign(socket, :state, state)}
+    edit = !assigns.state.post_changeset.valid?
+    assigns = Map.merge(assigns, %{form: form, edit: edit})
+
+    {:ok, assign(socket, assigns)}
   end
 
   def handle_event(
         "publish_update",
         %{"post" => %{"body" => update_body}},
-        %{assigns: %{state: state}} = socket
+        socket
       ) do
-    post_params = %{"body" => patch_post_body(update_body, state.post.body)}
+    post_params = %{"body" => patch_post_body(update_body, socket.assigns.state.post.body)}
 
-    case Content.publish_post(state.post, post_params) do
-      {:ok, post} ->
-        state = %State{
-          state
-          | post: post,
-            post_changeset: Content.change_post(post),
-            body: nil,
-            edit: false
-        }
+    send(self(), {:publish_post, post_params})
 
-        send(
-          self(),
-          {:perform_action, {ShowPost, state.show_post_component_id, [post: :refresh], post}}
-        )
-
-        {:noreply, assign(socket, :state, state)}
-
-      {:error, changeset} ->
-        state = %State{state | post_changeset: changeset, body: update_body}
-        {:noreply, assign(socket, :state, state)}
-    end
+    {:noreply, socket}
   end
 
-  def handle_event("switch_edit", _params, %{assigns: %{state: state}} = socket) do
-    state = %State{state | edit: not state.edit}
-    {:noreply, assign(socket, :state, state)}
+  def handle_event("switch_edit", _params, %{assigns: %{edit: edit}} = socket) do
+    {:noreply, assign(socket, :edit, not edit)}
   end
 
-  defp markdown_textarea_component(form, state, socket) do
+  defp markdown_textarea_component(id, form, state, socket) do
     live_component(socket, LeapWeb.Components.MarkdownTextarea,
-      id: "#{state.component_id}_body",
-      debounce: state.debounce,
+      id: "#{id}_body",
       form: form,
+      state: state,
       field: :body,
-      value: state.body
+      value: ""
     )
   end
 

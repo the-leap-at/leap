@@ -3,42 +3,47 @@ defmodule LeapWeb.PostLive do
   use LeapWeb, :live
   use TypedStruct
 
-  alias Leap.Content
+  alias LeapWeb.Live.Post.Mutations
   alias Leap.Content.Schema.Post
 
-  def mount(_params, _session, socket) do
-    {:ok, socket, temporary_assigns: [post: nil, post_component: nil]}
+  defmodule State do
+    @moduledoc false
+
+    @typedoc "Post state"
+    typedstruct do
+      field :post, Post.t(), enforce: true
+      field :post_changeset, Ecto.Changeset.t(Post.t())
+      field :post_component, module(), enforce: true, default: LeapWeb.Components.ShowPost
+    end
   end
 
-  def handle_params(%{"post_id" => post_id, "action" => "edit"}, _uri, socket) do
-    post = get_post(post_id)
-
-    post_component =
-      live_component(socket, LeapWeb.Components.EditPost,
-        id: "edit_post_" <> to_string(post_id),
-        post: post,
-        action: [:init]
-      )
-
-    {:noreply, assign(socket, post_component: post_component)}
+  def mount(%{"post_id" => post_id}, _session, socket) do
+    state = Mutations.init(%{post_id: post_id})
+    {:ok, assign(socket, :state, state)}
   end
 
-  def handle_params(%{"post_id" => post_id}, _uri, socket) do
-    post = get_post(post_id)
+  def handle_params(%{"component" => "edit"}, _uri, %{assigns: %{state: state}} = socket) do
+    state = Mutations.update(:post_component, LeapWeb.Components.EditPost, state)
 
-    post_component =
-      live_component(socket, LeapWeb.Components.ShowPost,
-        id: "show_post_" <> to_string(post_id),
-        post: post,
-        action: [:init]
-      )
-
-    {:noreply, assign(socket, post_component: post_component)}
+    {:noreply, assign(socket, :state, state)}
   end
 
-  defp get_post(post_id) do
-    Post
-    |> Content.get!(post_id)
-    |> Content.with_preloads([:category])
+  def handle_params(_params, _uri, %{assigns: %{state: state}} = socket) do
+    state = Mutations.update(:post_component, LeapWeb.Components.ShowPost, state)
+
+    {:noreply, assign(socket, :state, state)}
+  end
+
+  def handle_info({:publish_post, post_params}, %{assigns: %{state: state}} = socket) do
+    state = Mutations.publish_post(%{params: post_params}, state)
+
+    {:noreply, assign(socket, :state, state)}
+  end
+
+  defp post_component(state, socket) do
+    live_component(socket, state.post_component,
+      id: "show_post_" <> to_string(state.post.id),
+      state: state
+    )
   end
 end
