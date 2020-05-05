@@ -5,18 +5,17 @@ defmodule LeapWeb.Components.MarkdownTextarea do
   """
 
   use LeapWeb, :component
-  use TypedStruct
 
   @debounce 1000
 
   def mount(socket) do
-    {:ok, socket}
+    {:ok, assign(socket, :preview, false)}
   end
 
   def update(assigns, socket) do
-    value = assigns.form.params[to_string(assigns.field)] || assigns.value
+    value = assigns.post_form.params[to_string(assigns.field)] || assigns.value
 
-    assigns = Map.merge(assigns, %{value: value, preview: false, debounce: @debounce})
+    assigns = Map.merge(assigns, %{value: value, debounce: @debounce})
 
     {:ok, assign(socket, assigns)}
   end
@@ -25,7 +24,7 @@ defmodule LeapWeb.Components.MarkdownTextarea do
     {:noreply, assign(socket, :preview, not preview)}
   end
 
-  # hide the textarea while in preview mode, but to be still part of the form
+  # hide the textarea while in preview mode, but to be still part of the post_form
   defp hidden(preview) do
     if preview, do: "is-hidden"
   end

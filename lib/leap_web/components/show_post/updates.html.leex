@@ -1,7 +1,7 @@
 <div class="field" id="<%= @id %>">
 	<%= if @edit do %>
-		<%= @form %>
-		<%= markdown_textarea_component(@id, @form, @state, @socket) %>
+		<%= @post_form %>
+		<%= markdown_textarea_component(@id, @post_form, @state, @socket) %>
 		<div class="field is-grouped">
 			<div class="control">
 				<button class="button is-small" type="button" phx-click="switch_edit" phx-target="#<%= @id %>">Cancel</button>

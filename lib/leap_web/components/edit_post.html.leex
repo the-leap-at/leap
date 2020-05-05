@@ -1,20 +1,20 @@
-<div id="<%= @state.component_id %>">
-	<%= edit_category_component(@state.form, @state, @socket) %>
+<div id="<%= @id %>">
+	<%= edit_category_component(@id, @post_form, @state, @socket) %>
 
-	<%= @state.form %>
+	<%= @post_form %>
 
 	<div class="field">
 		<div class="control">
-			<%= text_input @state.form, :title,
-      phx_debounce: @state.debounce,
+			<%= text_input @post_form, :title,
+      phx_debounce: @debounce,
       class: "input is-large",
       placeholder: "TITLE"
       %>
 		</div>
-		<%= error_tag @state.form, :title %>
+		<%= error_tag @post_form, :title %>
 	</div>
 
-	<%= markdown_textarea_component(@state.form, @state, @socket) %>
+	<%= markdown_textarea_component(@id, @post_form, @state, @socket) %>
 
 	<div class="field is-grouped">
 		<%= if @state.post.state == :draft do %>

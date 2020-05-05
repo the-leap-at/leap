@@ -3,7 +3,6 @@ defmodule LeapWeb.Components.ShowPost do
   - Shows posts
   """
   use LeapWeb, :component
-  use TypedStruct
 
   def mount(socket) do
     {:ok, socket}
