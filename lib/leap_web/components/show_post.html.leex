@@ -1,8 +1,8 @@
-<div id="<%= @state.component_id %>">
+<div id="<%= @id %>">
 	<div class="subtitle">
 		Category: <%= @state.post.category.name %>
 	</div>
-	<%= updates_component(@state, @socket) %>
+	<%= updates_component(@id, @state, @socket) %>
 	<h1 class="title"><%= @state.post.title %></h1>
 	<div class="content">
 		<%= markdown_to_html(@state.post.body) %>
