@@ -18,8 +18,7 @@ defmodule LeapWeb.Router do
   scope "/", LeapWeb do
     pipe_through :browser
 
-    live "/post/:post_id", PostLive
-    live "/post/:post_id/:component", PostLive
+    live "/:container/:post_id", LayoutLive
   end
 
   # Other scopes may use custom stacks.
