@@ -15,7 +15,7 @@ config :leap, LeapWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "k+4P4FrpUGP8ZI0kl/XHVpjY+7SmKJfKwv+h7b+aeg4X1TfMXSf/PDDTyAIuCFw3",
   render_errors: [view: LeapWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Leap.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: Leap.PubSub,
   live_view: [signing_salt: "W95YXk9p"]
 
 # Configures Elixir's Logger
