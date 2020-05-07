@@ -39,7 +39,8 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
       {:ok, post} ->
         %State{
           state
-          | post: with_preloads(post)
+          | post: with_preloads(post),
+            post_changeset: Content.change_post(post)
         }
 
       {:error, changeset} ->
@@ -60,7 +61,8 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
       {:ok, post} ->
         %State{
           state
-          | post: with_preloads(post)
+          | post: with_preloads(post),
+            post_changeset: Content.change_post(post)
         }
 
       {:error, changeset} ->
@@ -77,6 +79,15 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
   def search_category(_args, state) do
     categories = Group.all(Category)
     %State{state | categories: categories}
+  end
+
+  @spec change_post_behaviour(args :: map(), State.t()) :: State.t()
+  def change_post_behaviour(%{post_behaviour: post_behaviour}, state) do
+    %State{
+      state
+      | post_behaviour: post_behaviour,
+        post_changeset: Content.change_post(state.post)
+    }
   end
 
   defp with_preloads(%Post{} = post) do

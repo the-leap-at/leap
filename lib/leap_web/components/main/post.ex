@@ -68,7 +68,7 @@ defmodule LeapWeb.Components.Main.Post do
         %{action: :show_post},
         %{assigns: %{state: state}} = socket
       ) do
-    state = Mutation.update(:post_behaviour, :show_post, state)
+    state = Mutation.change_post_behaviour(%{post_behaviour: :show_post}, state)
 
     {:ok, assign(socket, :state, state)}
   end
@@ -77,7 +77,7 @@ defmodule LeapWeb.Components.Main.Post do
         %{action: :edit_post},
         %{assigns: %{state: state}} = socket
       ) do
-    state = Mutation.update(:post_behaviour, :edit_post, state)
+    state = Mutation.change_post_behaviour(%{post_behaviour: :edit_post}, state)
 
     {:ok, assign(socket, :state, state)}
   end

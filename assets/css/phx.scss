@@ -1,16 +1,16 @@
 // live_view specific classes https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.html#module-loading-state-and-errors
 
-.bloom-changing {
+.leap-changing-hide {
   display: none;
 }
-.bloom-changed {
+.leap-changed-hide {
   display: block;
 }
 .phx-change-loading {
-  .bloom-changing {
+  .leap-changing-hide {
     display: block;
   }
-  .bloom-changed {
+  .leap-changed-hide {
     display: none;
   }
 }
