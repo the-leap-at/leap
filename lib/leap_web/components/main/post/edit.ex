@@ -67,6 +67,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
       id: "#{id}_body",
       post_form: post_form,
       field: :body,
+      name: "post[body]",
       value: Content.get_field(state.post_changeset, :body)
     )
   end

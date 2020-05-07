@@ -78,6 +78,7 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
       post_form: post_form,
       state: state,
       field: :body,
+      name: "post[body]",
       value: Content.get_change(state.post_changeset, :body, "")
     )
   end

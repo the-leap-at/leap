@@ -39,8 +39,7 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
       {:ok, post} ->
         %State{
           state
-          | post: with_preloads(post),
-            post_changeset: Content.change_post(post)
+          | post: with_preloads(post)
         }
 
       {:error, changeset} ->
