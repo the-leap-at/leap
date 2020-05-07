@@ -1,5 +1,5 @@
 defmodule LeapWeb.Components.Main.Post.Mutation do
-  @moduledoc "mutations for PostLive"
+  @moduledoc "mutations for Post"
 
   alias LeapWeb.Components.Main.Post.State
 
