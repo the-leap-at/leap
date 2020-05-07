@@ -7,7 +7,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
   alias Leap.Content
   alias Leap.Content.Schema.Post
 
-  @debounce 1000
+  @delay 1000
 
   def mount(socket) do
     {:ok, socket}
@@ -15,7 +15,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
 
   def update(assigns, socket) do
     post_form = post_form(assigns.id, assigns.state.post_changeset)
-    assigns = Map.merge(assigns, %{post_form: post_form, debounce: @debounce})
+    assigns = Map.merge(assigns, %{post_form: post_form})
 
     {:ok, assign(socket, assigns)}
   end
@@ -27,7 +27,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
         %{assigns: %{state: %{post: %Post{state: post_state}} = state}} = socket
       )
       when post_state in [:new, :draft] do
-    send_to_main(:update_post, post_params, state)
+    delay_send_to_main(@delay, :update_post, post_params, state)
 
     {:noreply, socket}
   end
@@ -37,7 +37,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
         %{"post" => post_params},
         %{assigns: %{state: %{post: %Post{state: :published}} = state}} = socket
       ) do
-    send_to_main(:validate_publish_post, post_params, state)
+    delay_send_to_main(@delay, :validate_publish_post, post_params, state)
 
     {:noreply, socket}
   end
@@ -67,7 +67,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
       id: "#{id}_body",
       post_form: post_form,
       field: :body,
-      value: state.post.body
+      value: Content.get_field(state.post_changeset, :body)
     )
   end
 

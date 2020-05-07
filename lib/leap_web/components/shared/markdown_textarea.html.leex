@@ -11,8 +11,7 @@
 		<%= textarea  @post_form, @field,
       value: @value,
       class: "textarea #{hidden(@preview)}",
-      rows: 12,
-      phx_debounce: @debounce
+      rows: 12
       %>
 	</div>
 	<%= error_tag @post_form, @field %>

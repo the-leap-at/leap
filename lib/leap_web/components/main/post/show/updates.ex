@@ -4,6 +4,10 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
   """
   use LeapWeb, :component
 
+  alias Leap.Content
+
+  @delay 1000
+
   def mount(socket) do
     {:ok, assign(socket, :edit, false)}
   end
@@ -21,7 +25,7 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
         %{"post" => post_params},
         %{assigns: %{state: state}} = socket
       ) do
-    send_to_main(:validate_publish_post, post_params, state)
+    delay_send_to_main(@delay, :validate_publish_post, post_params, state)
 
     {:noreply, socket}
   end
@@ -62,8 +66,8 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
 
   defp post_form(component_id, %Ecto.Changeset{} = changeset) do
     form_for(changeset, "#",
-      phx_submit: "publish_update",
       phx_change: "validate_post",
+      phx_submit: "publish_update",
       phx_target: "#" <> component_id
     )
   end
@@ -74,7 +78,7 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
       post_form: post_form,
       state: state,
       field: :body,
-      value: ""
+      value: Content.get_change(state.post_changeset, :body, "")
     )
   end
 end

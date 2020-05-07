@@ -7,7 +7,7 @@ defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
 
   alias Leap.Group.Schema.Category
 
-  @debounce 500
+  @delay 500
 
   def mount(socket) do
     {:ok, socket}
@@ -17,8 +17,7 @@ defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
     value = assigns.state.post.category && assigns.state.post.category.name
     category_form = search_category_form(assigns.id)
 
-    assigns =
-      Map.merge(assigns, %{category_form: category_form, value: value, debounce: @debounce})
+    assigns = Map.merge(assigns, %{category_form: category_form, value: value})
 
     {:ok, assign(socket, assigns)}
   end
@@ -28,7 +27,7 @@ defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
         %{"category" => %{"query_term" => term}},
         %{assigns: %{state: state}} = socket
       ) do
-    send_to_main(:search_category, term, state)
+    delay_send_to_main(@delay, :search_category, term, state)
     {:noreply, socket}
   end
 
