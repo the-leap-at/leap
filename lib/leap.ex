@@ -26,6 +26,14 @@ defmodule Leap do
             ) ::
               [Ecto.Schema.t()] | Ecto.Schema.t() | nil
       def with_preloads(schema, preloads, opts \\ []), do: Repo.preload(schema, preloads, opts)
+
+      def get_change(changeset, key, default \\ nil) do
+        Ecto.Changeset.get_change(changeset, key, default)
+      end
+
+      def get_field(changeset, key, default \\ nil) do
+        Ecto.Changeset.get_field(changeset, key, default)
+      end
     end
   end
 

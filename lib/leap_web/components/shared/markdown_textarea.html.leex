@@ -8,12 +8,9 @@
 		<button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @id %>">Preview</button>
 	<% end %>
 	<div class="control">
-		<%= textarea  @post_form, @field,
-      value: @value,
-      class: "textarea #{hidden(@preview)}",
-      rows: 12,
-      phx_debounce: @debounce
-      %>
+
+		<textarea name="<%= @name %>" rows=12  class="textarea <%= hidden(@preview) %>"><%= @value %></textarea>
+
 	</div>
 	<%= error_tag @post_form, @field %>
 </div>

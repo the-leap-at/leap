@@ -11,7 +11,6 @@
 	<div class="field">
 		<div class="control">
 			<%= text_input @category_form, :query_term,
-      phx_debounce: @debounce,
       class: "input",
       placeholder: "category filter",
 			value: @value

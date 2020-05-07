@@ -1,4 +1,4 @@
-defmodule LeapWeb.Components.MarkdownTextarea do
+defmodule LeapWeb.Components.Shared.MarkdownTextarea do
   @moduledoc """
   Markdown textarea with preview.
   Should be hightly configurable and extensible. Eg be able to add atoolbar to add predefined text
@@ -6,17 +6,11 @@ defmodule LeapWeb.Components.MarkdownTextarea do
 
   use LeapWeb, :component
 
-  @debounce 1000
-
   def mount(socket) do
     {:ok, assign(socket, :preview, false)}
   end
 
   def update(assigns, socket) do
-    value = assigns.post_form.params[to_string(assigns.field)] || assigns.value
-
-    assigns = Map.merge(assigns, %{value: value, debounce: @debounce})
-
     {:ok, assign(socket, assigns)}
   end
 

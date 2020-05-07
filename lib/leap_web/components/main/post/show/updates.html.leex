@@ -1,5 +1,6 @@
 <div class="field" id="<%= @id %>">
 	<%= if @edit do %>
+
 		<%= @post_form %>
 		<%= markdown_textarea_component(@id, @post_form, @state, @socket) %>
 		<div class="field is-grouped">
@@ -11,6 +12,7 @@
 			</div>
 		</div>
 	</form>
+
 <% else %>
 	<button class="button is-small" type="button" phx-click="switch_edit" phx-target="#<%= @id %>">Add New Update</button>
 <% end %>

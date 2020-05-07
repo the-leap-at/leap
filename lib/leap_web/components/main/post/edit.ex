@@ -1,4 +1,4 @@
-defmodule LeapWeb.Components.EditPost do
+defmodule LeapWeb.Components.Main.Post.Edit do
   @moduledoc """
   - Edit posts
   """
@@ -7,7 +7,7 @@ defmodule LeapWeb.Components.EditPost do
   alias Leap.Content
   alias Leap.Content.Schema.Post
 
-  @debounce 1000
+  @delay 1000
 
   def mount(socket) do
     {:ok, socket}
@@ -15,7 +15,7 @@ defmodule LeapWeb.Components.EditPost do
 
   def update(assigns, socket) do
     post_form = post_form(assigns.id, assigns.state.post_changeset)
-    assigns = Map.merge(assigns, %{post_form: post_form, debounce: @debounce})
+    assigns = Map.merge(assigns, %{post_form: post_form})
 
     {:ok, assign(socket, assigns)}
   end
@@ -24,10 +24,10 @@ defmodule LeapWeb.Components.EditPost do
   def handle_event(
         "update_post",
         %{"post" => post_params},
-        %{assigns: %{state: %{post: %Post{state: post_state}}}} = socket
+        %{assigns: %{state: %{post: %Post{state: post_state}} = state}} = socket
       )
       when post_state in [:new, :draft] do
-    send(self(), {:update_post, post_params})
+    delay_send_to_main(@delay, :update_post, post_params, state)
 
     {:noreply, socket}
   end
@@ -35,17 +35,17 @@ defmodule LeapWeb.Components.EditPost do
   def handle_event(
         "update_post",
         %{"post" => post_params},
-        %{assigns: %{state: %{post: %Post{state: :published}}}} = socket
+        %{assigns: %{state: %{post: %Post{state: :published}} = state}} = socket
       ) do
-    send(self(), {:validate_publish_post, post_params})
+    delay_send_to_main(@delay, :validate_publish_post, post_params, state)
 
     {:noreply, socket}
   end
 
   @doc "Publish a draft post or already published post (edit)"
-  def handle_event("publish_post", %{"post" => post_params}, socket) do
-    send(self(), {:publish_post, post_params})
-    send(self(), :redirect_to_show_post)
+  def handle_event("publish_post", %{"post" => post_params}, %{assigns: %{state: state}} = socket) do
+    send_to_main(:publish_post, post_params, state)
+    send_to_main(:show_post, %{}, state)
 
     {:noreply, socket}
   end
@@ -63,16 +63,17 @@ defmodule LeapWeb.Components.EditPost do
   end
 
   defp markdown_textarea_component(id, post_form, state, socket) do
-    live_component(socket, LeapWeb.Components.MarkdownTextarea,
+    live_component(socket, LeapWeb.Components.Shared.MarkdownTextarea,
       id: "#{id}_body",
       post_form: post_form,
       field: :body,
-      value: state.post.body
+      name: "post[body]",
+      value: Content.get_field(state.post_changeset, :body)
     )
   end
 
   defp edit_category_component(id, post_form, state, socket) do
-    live_component(socket, LeapWeb.Components.EditPost.EditCategory,
+    live_component(socket, LeapWeb.Components.Main.Post.Edit.EditCategory,
       id: "#{id}_category",
       post_form: post_form,
       state: state

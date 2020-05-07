@@ -1,4 +1,4 @@
-defmodule LeapWeb.Components.EditPost.EditCategory do
+defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
   @moduledoc """
   - Edit posts category
   - The categories are predefined and added in the DB with a migration (at least for now)
@@ -7,7 +7,7 @@ defmodule LeapWeb.Components.EditPost.EditCategory do
 
   alias Leap.Group.Schema.Category
 
-  @debounce 500
+  @delay 500
 
   def mount(socket) do
     {:ok, socket}
@@ -17,8 +17,7 @@ defmodule LeapWeb.Components.EditPost.EditCategory do
     value = assigns.state.post.category && assigns.state.post.category.name
     category_form = search_category_form(assigns.id)
 
-    assigns =
-      Map.merge(assigns, %{category_form: category_form, value: value, debounce: @debounce})
+    assigns = Map.merge(assigns, %{category_form: category_form, value: value})
 
     {:ok, assign(socket, assigns)}
   end
@@ -26,18 +25,18 @@ defmodule LeapWeb.Components.EditPost.EditCategory do
   def handle_event(
         "search_category",
         %{"category" => %{"query_term" => term}},
-        socket
+        %{assigns: %{state: state}} = socket
       ) do
-    send(self(), {:search_category, term})
+    delay_send_to_main(@delay, :search_category, term, state)
     {:noreply, socket}
   end
 
   def handle_event(
         "update_category",
         %{"category_id" => category_id},
-        socket
+        %{assigns: %{state: state}} = socket
       ) do
-    send(self(), {:update_post, %{category_id: category_id}})
+    send_to_main(:update_post, %{category_id: category_id}, state)
 
     {:noreply, socket}
   end
