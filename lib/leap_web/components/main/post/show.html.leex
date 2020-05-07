@@ -7,5 +7,5 @@
 	<div class="content">
 		<%= markdown_to_html(@state.post.body) %>
 	</div>
-	<%= live_patch "Edit Post", class: "button is-primary is-small is-fullwidth", to: Routes.live_path(@socket, LeapWeb.PostLive, @state.post.id, "edit") %>
+	<button class="button is-primary is-small is-fullwidth" type="button" phx-click="edit_post" phx-target="#<%= @id %>">Edit Post</button>
 </div>

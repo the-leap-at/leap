@@ -14,7 +14,8 @@ defmodule LeapWeb.Components.Container.LearnPath do
     post_component =
       live_component(socket, LeapWeb.Components.Main.Post,
         id: "post_#{to_string(assigns.post_id)}",
-        post: post
+        post: post,
+        action: :init
       )
 
     assigns = Map.merge(assigns, %{post_component: post_component})

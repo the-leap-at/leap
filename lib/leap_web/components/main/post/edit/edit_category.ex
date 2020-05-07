@@ -1,4 +1,4 @@
-defmodule LeapWeb.Components.EditPost.EditCategory do
+defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
   @moduledoc """
   - Edit posts category
   - The categories are predefined and added in the DB with a migration (at least for now)
@@ -26,18 +26,18 @@ defmodule LeapWeb.Components.EditPost.EditCategory do
   def handle_event(
         "search_category",
         %{"category" => %{"query_term" => term}},
-        socket
+        %{assigns: %{state: state}} = socket
       ) do
-    send(self(), {:search_category, term})
+    send_to_main(:search_category, term, state)
     {:noreply, socket}
   end
 
   def handle_event(
         "update_category",
         %{"category_id" => category_id},
-        socket
+        %{assigns: %{state: state}} = socket
       ) do
-    send(self(), {:update_post, %{category_id: category_id}})
+    send_to_main(:update_post, %{category_id: category_id}, state)
 
     {:noreply, socket}
   end

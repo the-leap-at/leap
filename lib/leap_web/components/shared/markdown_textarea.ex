@@ -1,4 +1,4 @@
-defmodule LeapWeb.Components.MarkdownTextarea do
+defmodule LeapWeb.Components.Shared.MarkdownTextarea do
   @moduledoc """
   Markdown textarea with preview.
   Should be hightly configurable and extensible. Eg be able to add atoolbar to add predefined text

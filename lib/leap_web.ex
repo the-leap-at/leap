@@ -107,6 +107,10 @@ defmodule LeapWeb do
       import LeapWeb.Gettext
       alias LeapWeb.Router.Helpers, as: Routes
 
+      def send_to_main(action, payload, state) do
+        send(self(), {:perform_action, {state.module, state.id, action, payload}})
+      end
+
       def markdown_to_html(body) do
         safe =
           body

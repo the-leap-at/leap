@@ -1,7 +1,7 @@
-defmodule LeapWeb.Live.Post.Mutation do
+defmodule LeapWeb.Components.Main.Post.Mutation do
   @moduledoc "mutations for PostLive"
 
-  alias LeapWeb.PostLive.State
+  alias LeapWeb.Components.Main.Post.State
 
   alias Leap.Content
   alias Leap.Content.Schema.Post
@@ -11,17 +11,22 @@ defmodule LeapWeb.Live.Post.Mutation do
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
   @spec init(args :: map()) :: State.t()
-  def init(%{post_id: post_id}) do
-    post = get_post(post_id)
+  def init(%{id: id, module: module, post: post}) do
     changeset = Content.change_post(post)
 
     %State{
+      id: id,
+      module: module,
       post: post,
       post_changeset: changeset,
-      post_component: LeapWeb.Components.Main.Post.Show,
+      post_behaviour: post_behaviour(post),
       categories: Group.all(Category)
     }
   end
+
+  defp post_behaviour(%Post{state: :new}), do: :edit_post
+  defp post_behaviour(%Post{state: :draft}), do: :edit_post
+  defp post_behaviour(%Post{state: :published}), do: :show_post
 
   @spec update(atom(), any(), State.t()) :: State.t()
   def update(key, value, state) do
@@ -72,12 +77,6 @@ defmodule LeapWeb.Live.Post.Mutation do
   def search_category(_args, state) do
     categories = Group.all(Category)
     %State{state | categories: categories}
-  end
-
-  defp get_post(post_id) do
-    Post
-    |> Content.get!(post_id)
-    |> Content.with_preloads([:category])
   end
 
   defp with_preloads(%Post{} = post) do
