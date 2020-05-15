@@ -1,5 +1,6 @@
 defmodule Leap.Group.Schema.Category do
   @moduledoc "Category schema"
+
   use Leap, :schema
 
   alias Leap.Content.Schema.Post

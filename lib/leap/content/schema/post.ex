@@ -40,16 +40,21 @@ defmodule Leap.Content.Schema.Post do
     field :state, StateEnum, default: "new"
 
     many_to_many :children, Post,
-      join_through: "post_relations",
+      join_through: Leap.Content.Schema.PostRelation,
       join_keys: [parent_id: :id, child_id: :id]
 
     many_to_many :parents, Post,
-      join_through: "post_relations",
+      join_through: Leap.Content.Schema.PostRelation,
       join_keys: [child_id: :id, parent_id: :id]
 
     belongs_to :category, Category, on_replace: :delete
 
     timestamps()
+  end
+
+  def changeset_create(post, attrs) do
+    post
+    |> cast(attrs, [:type])
   end
 
   def changeset_update(post, attrs) do

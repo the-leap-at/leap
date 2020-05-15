@@ -7,5 +7,5 @@
 	<div class="content">
 		<%= markdown_to_html(@state.post.body) %>
 	</div>
-	<button class="button is-primary is-small is-fullwidth" type="button" phx-click="edit_post" phx-target="#<%= @id %>">Edit Post</button>
+	<button class="button is-info is-small" type="button" phx-click="edit_post" phx-target="#<%= @id %>">Edit Post</button>
 </div>

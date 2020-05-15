@@ -7,10 +7,10 @@
 	<% else %>
 		<button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @id %>">Preview</button>
 	<% end %>
+
 	<div class="control">
-
-		<textarea name="<%= @name %>" rows=12  class="textarea <%= hidden(@preview) %>"><%= @value %></textarea>
-
+		<%= textarea  @post_form, @field, placeholder: "EMPTY MD", value: @value, class: "textarea #{hidden(@preview)}", rows: 12 %>
 	</div>
 	<%= error_tag @post_form, @field %>
+
 </div>

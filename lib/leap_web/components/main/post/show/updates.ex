@@ -76,10 +76,10 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
     live_component(socket, LeapWeb.Components.Shared.MarkdownTextarea,
       id: "#{id}_body",
       post_form: post_form,
-      state: state,
       field: :body,
-      name: "post[body]",
-      value: Content.get_change(state.post_changeset, :body, "")
+      # TODO find a way not to put empty space inside body
+      # Strange behaviour when nil
+      value: Content.get_change(state.post_changeset, :body, "  ")
     )
   end
 end
