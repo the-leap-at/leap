@@ -45,7 +45,6 @@ defmodule LeapWeb.Components.Main.Post.Edit do
   @doc "Publish a draft post or already published post (edit)"
   def handle_event("publish_post", %{"post" => post_params}, %{assigns: %{state: state}} = socket) do
     send_to_main(:publish_post, post_params, state)
-    send_to_main(:show_post, %{}, state)
 
     {:noreply, socket}
   end
@@ -67,7 +66,6 @@ defmodule LeapWeb.Components.Main.Post.Edit do
       id: "#{id}_body",
       post_form: post_form,
       field: :body,
-      name: "post[body]",
       value: Content.get_field(state.post_changeset, :body)
     )
   end

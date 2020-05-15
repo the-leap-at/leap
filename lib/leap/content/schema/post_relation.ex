@@ -10,5 +10,7 @@ defmodule Leap.Content.Schema.PostRelation do
   schema "post_relations" do
     belongs_to :parent, Post
     belongs_to :child, Post
+
+    timestamps()
   end
 end

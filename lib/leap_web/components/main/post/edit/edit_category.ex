@@ -36,7 +36,7 @@ defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
         %{"category_id" => category_id},
         %{assigns: %{state: state}} = socket
       ) do
-    send_to_main(:update_post, %{category_id: category_id}, state)
+    send_to_main(:update_post_category, %{category_id: category_id}, state)
 
     {:noreply, socket}
   end

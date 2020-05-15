@@ -13,8 +13,14 @@ defmodule Leap do
       @spec get(Ecto.Queryable.t(), id :: integer()) :: Ecto.Schema.t() | nil
       def get(queryable, id), do: Repo.get(queryable, id)
 
-      @spec get!(Ecto.Queryable.t(), id :: integer()) :: Ecto.Schema.t() | nil
-      def get!(queryable, id), do: Repo.get(queryable, id)
+      @spec get!(Ecto.Queryable.t(), id :: integer()) :: Ecto.Schema.t()
+      def get!(queryable, id), do: Repo.get!(queryable, id)
+
+      @spec get_by(Ecto.Queryable.t(), clauses :: Keyword.t()) :: Ecto.Schema.t() | nil
+      def get_by(queryable, clauses), do: Repo.get_by(queryable, clauses)
+
+      @spec get_by!(Ecto.Queryable.t(), clauses :: Keyword.t()) :: Ecto.Schema.t()
+      def get_by!(queryable, clauses), do: Repo.get_by!(queryable, clauses)
 
       @spec all(Ecto.Queryable.t()) :: [Ecto.Schema.t()]
       def all(queryable), do: Repo.all(queryable)

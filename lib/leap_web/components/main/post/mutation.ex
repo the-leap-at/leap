@@ -1,5 +1,8 @@
 defmodule LeapWeb.Components.Main.Post.Mutation do
-  @moduledoc "mutations for Post"
+  @moduledoc """
+  Mutations for Post
+  Need to make distinction between mutations that update the changeset or not
+  """
 
   alias LeapWeb.Components.Main.Post.State
 
@@ -39,12 +42,23 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
       {:ok, post} ->
         %State{
           state
-          | post: with_preloads(post)
+          | post: with_preloads(post),
+            post_changeset: Content.change_post(post)
         }
 
       {:error, changeset} ->
         %State{state | post_changeset: changeset}
     end
+  end
+
+  @spec update_post_category(args :: map(), State.t()) :: State.t()
+  def update_post_category(%{params: post_params}, state) do
+    post = Content.update_post!(state.post, post_params)
+
+    %State{
+      state
+      | post: with_preloads(post)
+    }
   end
 
   @spec validate_publish_post(args :: map(), State.t()) :: State.t()
@@ -61,7 +75,8 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
         %State{
           state
           | post: with_preloads(post),
-            post_changeset: Content.change_post(post)
+            post_changeset: Content.change_post(post),
+            post_behaviour: :show_post
         }
 
       {:error, changeset} ->

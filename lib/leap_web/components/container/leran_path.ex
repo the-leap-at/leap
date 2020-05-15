@@ -25,6 +25,6 @@ defmodule LeapWeb.Components.Container.LearnPath do
   defp get_post(post_id) do
     Post
     |> Content.get!(post_id)
-    |> Content.with_preloads([:category])
+    |> Content.with_preloads([:category, :parents])
   end
 end

@@ -5,10 +5,16 @@ defmodule Leap.Content.Posts do
   """
   alias Leap.Repo
   alias Leap.Content.Schema.Post
-  alias Leap.Group.Schema.Category
 
   @editable_state [:draft, :published]
   @publishable_state [:draft, :published]
+
+  @spec create!(attrs :: map()) :: Post.t()
+  def create!(attrs) do
+    %Post{}
+    |> Post.changeset_create(attrs)
+    |> Repo.insert!()
+  end
 
   @doc "Function used by Machinery to persist the state update"
   @spec update_state!(Post.t(), next_state :: Post.StateEnum.t()) :: Post.t()
@@ -47,6 +53,13 @@ defmodule Leap.Content.Posts do
     |> Repo.update()
   end
 
+  @spec update!(Post.t(), attrs :: map()) :: Post.t()
+  def update!(%Post{state: state} = post, attrs) do
+    post
+    |> Post.changeset_update(attrs)
+    |> Repo.update!()
+  end
+
   @spec publish(Post.t(), attrs :: map()) ::
           {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
   def publish(%Post{state: state} = post, attrs) when state in @publishable_state do
@@ -60,11 +73,23 @@ defmodule Leap.Content.Posts do
   defp transition_state_to_published(%Post{state: :published} = post), do: {:ok, post}
   defp transition_state_to_published(post), do: transition_state_to(post, :published)
 
-  @spec update_category!(Post.t(), Category.t()) :: Post.t()
-  def update_category!(%Post{} = post, %Category{} = category) do
+  @spec add_parent!(Post.t(), Post.t()) :: Post.t()
+  def add_parent!(post, parent) do
+    post = Repo.preload(post, :parents)
+
     post
     |> Ecto.Changeset.change()
-    |> Ecto.Changeset.put_assoc(:category, category)
+    |> Ecto.Changeset.put_assoc(:parents, [parent | post.parents])
+    |> Repo.update!()
+  end
+
+  @spec add_child!(Post.t(), Post.t()) :: Post.t()
+  def add_child!(post, child) do
+    post = Repo.preload(post, :children)
+
+    post
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:children, [child | post.children])
     |> Repo.update!()
   end
 

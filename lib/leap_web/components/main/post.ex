@@ -38,6 +38,15 @@ defmodule LeapWeb.Components.Main.Post do
   end
 
   def update(
+        %{action: :update_post_category, payload: post_params},
+        %{assigns: %{state: state}} = socket
+      ) do
+    state = Mutation.update_post_category(%{params: post_params}, state)
+
+    {:ok, assign(socket, :state, state)}
+  end
+
+  def update(
         %{action: :validate_publish_post, payload: post_params},
         %{assigns: %{state: state}} = socket
       ) do
@@ -60,15 +69,6 @@ defmodule LeapWeb.Components.Main.Post do
         %{assigns: %{state: state}} = socket
       ) do
     state = Mutation.search_category(%{term: search_term}, state)
-
-    {:ok, assign(socket, :state, state)}
-  end
-
-  def update(
-        %{action: :show_post},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.change_post_behaviour(%{post_behaviour: :show_post}, state)
 
     {:ok, assign(socket, :state, state)}
   end

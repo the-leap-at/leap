@@ -1,4 +1,4 @@
-defmodule LeapWeb.LayoutLive do
+defmodule LeapWeb.AppLive do
   @moduledoc """
   - plays the role of layout for the SPA
   - plays the role of router
@@ -14,6 +14,16 @@ defmodule LeapWeb.LayoutLive do
     content_component =
       live_component(socket, LeapWeb.Components.Container.LearnPath,
         id: "learn_path_#{to_string(post_id)}",
+        post_id: post_id
+      )
+
+    {:noreply, assign(socket, :content_component, content_component)}
+  end
+
+  def handle_params(%{"container" => "question", "post_id" => post_id}, _uri, socket) do
+    content_component =
+      live_component(socket, LeapWeb.Components.Container.Question,
+        id: "question_#{to_string(post_id)}",
         post_id: post_id
       )
 
