@@ -19,8 +19,7 @@ config :leap, LeapWeb.Endpoint,
   live_view: [signing_salt: "W95YXk9p"]
 
 # for dev providers are added in dev.secret.exs
-config :leap, :pow_assent,
-  http_adapter: Assent.HTTPAdapter.Mint
+config :leap, :pow_assent, http_adapter: Assent.HTTPAdapter.Mint
 
 config :pow, Pow.Postgres.Store,
   repo: Leap.Repo,
@@ -29,7 +28,8 @@ config :pow, Pow.Postgres.Store,
 config :leap, :pow,
   user: Leap.Accounts.Schema.User,
   repo: Leap.Repo,
-  cache_store_backend: Pow.Postgres.Store
+  cache_store_backend: Pow.Postgres.Store,
+  web_module: LeapWeb
 
 # Configures Elixir's Logger
 config :logger, :console,

@@ -42,7 +42,7 @@ defmodule LeapWeb.Router do
   scope "/" do
     pipe_through :browser
 
-    pow_routes()
+    pow_session_routes()
     pow_assent_routes()
   end
 
