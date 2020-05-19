@@ -18,6 +18,15 @@ config :leap, LeapWeb.Endpoint,
   pubsub_server: Leap.PubSub,
   live_view: [signing_salt: "W95YXk9p"]
 
+config :pow, Pow.Postgres.Store,
+  repo: Leap.Repo,
+  schema: Leap.Accounts.Schema.Session
+
+config :leap, :pow,
+  user: Leap.Accounts.Schema.User,
+  repo: Leap.Repo,
+  cache_store_backend: Pow.Postgres.Store
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",

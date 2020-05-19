@@ -54,7 +54,7 @@ defmodule Leap.Content.Posts do
   end
 
   @spec update!(Post.t(), attrs :: map()) :: Post.t()
-  def update!(%Post{state: state} = post, attrs) do
+  def update!(%Post{} = post, attrs) do
     post
     |> Post.changeset_update(attrs)
     |> Repo.update!()
