@@ -5,8 +5,13 @@ defmodule Leap.Accounts.Schema.User do
   """
   use Ecto.Schema
   use Pow.Ecto.Schema
+  use PowAssent.Ecto.Schema
 
   schema "users" do
+    has_many :user_identities, Leap.Accounts.Schema.UserIdentity,
+      on_delete: :delete_all,
+      foreign_key: :user_id
+
     pow_user_fields()
 
     timestamps()

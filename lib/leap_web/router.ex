@@ -1,6 +1,7 @@
 defmodule LeapWeb.Router do
   use LeapWeb, :router
   use Pow.Phoenix.Router
+  use PowAssent.Phoenix.Router
   import Phoenix.LiveView.Router
 
   pipeline :browser do
@@ -9,6 +10,13 @@ defmodule LeapWeb.Router do
     plug :fetch_live_flash
     plug :put_root_layout, {LeapWeb.LayoutView, :root}
     plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
+  pipeline :skip_csrf_protection do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
     plug :put_secure_browser_headers
   end
 
@@ -26,9 +34,16 @@ defmodule LeapWeb.Router do
   end
 
   scope "/" do
+    pipe_through :skip_csrf_protection
+
+    pow_assent_authorization_post_callback_routes()
+  end
+
+  scope "/" do
     pipe_through :browser
 
     pow_routes()
+    pow_assent_routes()
   end
 
   scope "/", LeapWeb do
