@@ -1,0 +1,11 @@
+defmodule Leap.Repo.Migrations.AddPictureAndStateToUser do
+  use Ecto.Migration
+
+  def change do
+    alter table(:users) do
+      add :picture_url, :string
+      add :state, :string, null: false, default: "new"
+      add :display_name, :string
+    end
+  end
+end

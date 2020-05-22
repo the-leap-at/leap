@@ -11,6 +11,9 @@ defmodule LeapWeb.Router do
     plug :put_root_layout, {LeapWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+
+    plug PowAssent.Plug.Reauthorization,
+      handler: PowAssent.Phoenix.ReauthorizationPlugHandler
   end
 
   pipeline :skip_csrf_protection do
