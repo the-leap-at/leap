@@ -33,10 +33,10 @@ defmodule Leap.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.5.1"},
+      {:phoenix, "~> 1.5"},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
-      {:phoenix_live_view, "~> 0.12.0"},
+      {:phoenix_live_view, "~> 0.13"},
       {:ecto_sql, "~> 3.1"},
       {:ecto_enum, "~> 1.4"},
       {:postgrex, ">= 0.0.0"},
@@ -53,7 +53,7 @@ defmodule Leap.MixProject do
       {:timex, "~> 3.5"},
       {:pow, "~> 1.0"},
       {:pow_postgres_store, "~> 1.0.0-rc2"},
-      {:pow_assent, "~> 0.4.7"},
+      {:pow_assent, "~> 0.4"},
       {:certifi, "~> 2.4"},
       {:ssl_verify_fun, "~> 1.1"},
       {:mint, "~> 1.0"},
