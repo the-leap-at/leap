@@ -19,7 +19,9 @@ config :leap, LeapWeb.Endpoint,
   live_view: [signing_salt: "W95YXk9p"]
 
 # for dev providers are added in dev.secret.exs
-config :leap, :pow_assent, http_adapter: Assent.HTTPAdapter.Mint
+config :leap, :pow_assent,
+  http_adapter: Assent.HTTPAdapter.Mint,
+  user_identities_context: Leap.Accounts.UserIdentities
 
 config :pow, Pow.Postgres.Store,
   repo: Leap.Repo,

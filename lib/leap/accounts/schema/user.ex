@@ -46,15 +46,19 @@ defmodule Leap.Accounts.Schema.User do
 
   def user_identity_changeset(user, user_identity, attrs, user_id_attrs) do
     user
-    |> cast(attrs, [])
+    |> changeset_user_details(attrs)
     |> put_state_authenticated(user, user_identity)
-    |> put_picture_url(attrs)
     |> pow_assent_user_identity_changeset(user_identity, attrs, user_id_attrs)
+  end
+
+  def changeset_user_details(user, attrs) do
+    user
+    |> cast(attrs, [])
+    |> put_picture_url(attrs)
   end
 
   defp put_state_authenticated(changeset, %User{state: "new"}, %{"uid" => uid})
        when is_present(uid) do
-    IO.inspect("HEREEEEEEE")
     put_change(changeset, :state, :authenticated)
   end
 

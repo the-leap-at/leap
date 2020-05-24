@@ -7,6 +7,13 @@ defmodule Leap.Accounts.Users do
   alias Leap.Repo
   alias Leap.Accounts.Schema.User
 
+  def fetch_user(email) do
+    case Repo.get_by(User, email: email) do
+      %User{} = user -> {:ok, user}
+      result -> {:error, result}
+    end
+  end
+
   @doc "Function used by Machinery to persist the state update"
   @spec update_state!(User.t(), next_state :: User.StateEnum.t()) :: User.t()
   def update_state!(%User{} = user, next_state) do
