@@ -6,6 +6,10 @@ defmodule Leap.Accounts.Schema.User do
   use Ecto.Schema
   use Pow.Ecto.Schema
   use PowAssent.Ecto.Schema
+
+  use Pow.Extension.Ecto.Schema,
+    extensions: [PowEmailConfirmation, PowResetPassword, PowPersistentSession]
+
   import Ecto.Changeset
   import EctoEnum
 
@@ -13,6 +17,7 @@ defmodule Leap.Accounts.Schema.User do
   alias Leap.Accounts.Users
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
+
   defenum StateEnum, ["new", "authenticated", "onbaorded"]
 
   defmodule StateMachine do
@@ -44,10 +49,15 @@ defmodule Leap.Accounts.Schema.User do
     timestamps()
   end
 
+  def changeset(user, attrs) do
+    user
+    |> pow_changeset(attrs)
+    |> pow_extension_changeset(attrs)
+  end
+
   def user_identity_changeset(user, user_identity, attrs, user_id_attrs) do
     user
     |> changeset_user_details(attrs)
-    |> put_state_authenticated(user, user_identity)
     |> pow_assent_user_identity_changeset(user_identity, attrs, user_id_attrs)
   end
 
@@ -56,13 +66,6 @@ defmodule Leap.Accounts.Schema.User do
     |> cast(attrs, [])
     |> put_picture_url(attrs)
   end
-
-  defp put_state_authenticated(changeset, %User{state: "new"}, %{"uid" => uid})
-       when is_present(uid) do
-    put_change(changeset, :state, :authenticated)
-  end
-
-  defp put_state_authenticated(changeset, _user, _user_identity), do: changeset
 
   defp put_picture_url(changeset, %{"picture" => picture_url}) do
     put_change(changeset, :picture_url, picture_url)

@@ -6,7 +6,6 @@ defmodule LeapWeb.AppLive do
   use LeapWeb, :live
 
   def mount(_params, %{"current_user_id" => current_user_id}, socket) do
-    IO.inspect(current_user_id)
     navbar_component = live_component(socket, LeapWeb.Components.Container.Navbar, id: "navbar")
     {:ok, assign(socket, :navbar_component, navbar_component)}
   end

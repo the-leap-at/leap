@@ -57,7 +57,8 @@ defmodule Leap.MixProject do
       {:certifi, "~> 2.4"},
       {:ssl_verify_fun, "~> 1.1"},
       {:mint, "~> 1.0"},
-      {:castore, "~> 0.1"}
+      {:castore, "~> 0.1"},
+      {:swoosh, "~> 0.25"}
     ]
   end
 

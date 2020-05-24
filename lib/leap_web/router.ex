@@ -1,6 +1,10 @@
 defmodule LeapWeb.Router do
   use LeapWeb, :router
   use Pow.Phoenix.Router
+
+  use Pow.Extension.Phoenix.Router,
+    extensions: [PowEmailConfirmation, PowResetPassword, PowPersistentSession]
+
   use PowAssent.Phoenix.Router
   import Phoenix.LiveView.Router
 
@@ -46,6 +50,7 @@ defmodule LeapWeb.Router do
     pipe_through :browser
 
     pow_routes()
+    pow_extension_routes()
     pow_assent_routes()
   end
 

@@ -18,6 +18,10 @@ config :leap, LeapWeb.Endpoint,
   pubsub_server: Leap.PubSub,
   live_view: [signing_salt: "W95YXk9p"]
 
+config :leap, Leap.Mailers, adapter: Swoosh.Adapters.Local
+
+config :swoosh, serve_mailbox: true, preview_port: 4001
+
 # for dev providers are added in dev.secret.exs
 config :leap, :pow_assent,
   http_adapter: Assent.HTTPAdapter.Mint,
@@ -31,7 +35,10 @@ config :leap, :pow,
   user: Leap.Accounts.Schema.User,
   repo: Leap.Repo,
   cache_store_backend: Pow.Postgres.Store,
-  web_module: LeapWeb
+  web_module: LeapWeb,
+  extensions: [PowEmailConfirmation, PowResetPassword, PowPersistentSession],
+  controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
+  mailer_backend: Leap.Mailers.Pow
 
 # Configures Elixir's Logger
 config :logger, :console,
