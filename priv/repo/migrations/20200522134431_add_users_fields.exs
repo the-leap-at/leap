@@ -7,5 +7,7 @@ defmodule Leap.Repo.Migrations.AddPictureAndStateToUser do
       add :state, :string, null: false, default: "new"
       add :display_name, :string
     end
+
+    create unique_index(:users, [:display_name])
   end
 end

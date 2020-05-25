@@ -35,4 +35,17 @@ defmodule Leap.Accounts.Users do
         {:error, changeset}
     end
   end
+
+  @spec update(User.t(), attrs :: map()) ::
+          {:ok, User.t()} | {:error, Ecto.Changeset.t(User.t())}
+  def update(%User{} = user, attrs) do
+    user
+    |> User.changeset_user_details(attrs)
+    |> Repo.update()
+  end
+
+  @spec change(Post.t()) :: Ecto.Changeset.t(User.t())
+  def change(%User{} = user, attrs \\ %{}) do
+    User.changeset_user_details(user, attrs)
+  end
 end

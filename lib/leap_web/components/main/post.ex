@@ -3,13 +3,15 @@ defmodule LeapWeb.Components.Main.Post do
   use TypedStruct
 
   alias LeapWeb.Components.Main.Post.Mutation
+  alias Leap.Content.Schema.Post
+  alias Leap.Group.Schema.Category
 
   defmodule State do
     @moduledoc false
 
     @typedoc "Post state"
     typedstruct do
-      field :id, Sting.t(), enforce: true
+      field :id, String.t(), enforce: true
       field :module, module(), enforce: true
       field :post, Post.t(), enforce: true
       field :post_changeset, Ecto.Changeset.t(Post.t())

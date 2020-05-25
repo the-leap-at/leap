@@ -5,9 +5,34 @@ defmodule LeapWeb.AppLive do
   """
   use LeapWeb, :live
 
+  alias Leap.Accounts
+  alias Leap.Accounts.Schema.User
+
   def mount(_params, %{"current_user_id" => current_user_id}, socket) do
+    current_user = Accounts.get!(User, current_user_id) |> user_authenticated()
     navbar_component = live_component(socket, LeapWeb.Components.Container.Navbar, id: "navbar")
-    {:ok, assign(socket, :navbar_component, navbar_component)}
+
+    socket =
+      assign(socket, %{
+        current_user: current_user,
+        navbar_component: navbar_component
+      })
+
+    {:ok, socket}
+  end
+
+  def handle_params(
+        _params,
+        _uri,
+        %{assigns: %{current_user: %User{state: :authenticated} = current_user}} = socket
+      ) do
+    content_component =
+      live_component(socket, LeapWeb.Components.Container.Onboarding,
+        id: "onboarding",
+        current_user: current_user
+      )
+
+    {:noreply, assign(socket, :content_component, content_component)}
   end
 
   def handle_params(%{"container" => "learn_path", "post_id" => post_id}, _uri, socket) do
@@ -33,4 +58,9 @@ defmodule LeapWeb.AppLive do
   def handle_params(_params, _uri, %{assigns: %{live_action: :home}} = socket) do
     {:noreply, assign(socket, :content_component, nil)}
   end
+
+  defp user_authenticated(%User{state: :new} = user),
+    do: Accounts.transition_user_state_to(user, :authenticated)
+
+  defp user_authenticated(user), do: user
 end

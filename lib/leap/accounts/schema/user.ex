@@ -13,12 +13,11 @@ defmodule Leap.Accounts.Schema.User do
   import Ecto.Changeset
   import EctoEnum
 
-  alias __MODULE__
   alias Leap.Accounts.Users
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
-  defenum StateEnum, ["new", "authenticated", "onbaorded"]
+  defenum StateEnum, ["new", "authenticated", "display_name_set", "categories_set", "onbaorded"]
 
   defmodule StateMachine do
     @moduledoc "State machine for User. See Machinary docs for guards or callbacks if needed"
@@ -26,7 +25,9 @@ defmodule Leap.Accounts.Schema.User do
       states: StateEnum.__valid_values__(),
       transitions: %{
         new: :authenticated,
-        authenticated: :onbaorded
+        authenticated: :display_name_set,
+        display_name_set: :categories_set,
+        categories_set: :onbaorded
       }
 
     def persist(user, next_state) do
@@ -63,7 +64,10 @@ defmodule Leap.Accounts.Schema.User do
 
   def changeset_user_details(user, attrs) do
     user
-    |> cast(attrs, [])
+    |> cast(attrs, [:picture_url, :display_name])
+    |> validate_format(:display_name, ~r/^(?!.*[_]{2})[A-Za-z]\w*[A-Za-z0-9]$/)
+    |> validate_length(:display_name, min: 3, max: 50)
+    |> unique_constraint(:display_name)
     |> put_picture_url(attrs)
   end
 

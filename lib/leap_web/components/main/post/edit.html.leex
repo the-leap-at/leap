@@ -3,30 +3,30 @@
 
 	<%= @post_form %>
 
-	<div class="field">
-		<div class="control">
-			<%= text_input @post_form, :title,
-      class: "input is-large",
-      placeholder: "TITLE"
-      %>
+		<div class="field">
+			<div class="control">
+				<%= text_input @post_form, :title,
+				class: "input is-large",
+				placeholder: "TITLE"
+				%>
+			</div>
+			<%= error_tag @post_form, :title %>
 		</div>
-		<%= error_tag @post_form, :title %>
-	</div>
 
-	<%= markdown_textarea_component(@id, @post_form, @state, @socket) %>
+		<%= markdown_textarea_component(@id, @post_form, @state, @socket) %>
 
-	<div class="field is-grouped">
-		<%= if @state.post.state == :draft do %>
+		<div class="field is-grouped">
+			<%= if @state.post.state == :draft do %>
 			<div class="control">
 				<div class="leap-changed-hide">saved as draft</div>
 				<div class="leap-changing-hide">saving...</div>
 			</div>
-		<% end %>
-		<div class="control is-expanded">
-			<%= submit "PUBLISH", phx_disable_with: "Saving...",
-      class: "button is-primary is-small is-fullwidth" %>
+			<% end %>
+			<div class="control is-expanded">
+				<%= submit "PUBLISH", phx_disable_with: "Saving...",
+				class: "button is-primary is-small is-fullwidth" %>
+			</div>
 		</div>
-	</div>
-</form>
+	</form>
 
 </div>
