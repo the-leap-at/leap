@@ -33,9 +33,24 @@ defmodule LeapWeb.Components.Main.UserOnboarding do
     {:ok, assign(socket, :state, state)}
   end
 
+  def update(
+        %{action: :transition_user_state, payload: user_state},
+        %{assigns: %{state: state}} = socket
+      ) do
+    state = Mutation.transition_user_state(user_state, state)
+    {:ok, assign(socket, :state, state)}
+  end
+
   defp onboarding_step_component(%{current_user: %User{state: :authenticated}} = state, socket) do
     live_component(socket, LeapWeb.Components.Main.UserOnboarding.DisplayName,
-      id: "display_name" <> state.id,
+      id: "display_name_" <> state.id,
+      state: state
+    )
+  end
+
+  defp onboarding_step_component(%{current_user: %User{state: :display_name_set}} = state, socket) do
+    live_component(socket, LeapWeb.Components.Main.UserOnboarding.Preferences,
+      id: "preferences_" <> state.id,
       state: state
     )
   end

@@ -10,4 +10,11 @@
       <%= error_tag @display_name_form, :display_name %>
     </div>
 	</form>
+
+  <%= link to: "#", class: "button is-info", type: "button", disabled: not allow_next?(@state), phx_click: "next",  phx_target: "##{@id}" do %>
+    <span>NEXT</span>
+    <span class="icon is-small">
+      <i class="fas fa-caret-right"></i>
+    </span>
+  <% end %>
 </div>

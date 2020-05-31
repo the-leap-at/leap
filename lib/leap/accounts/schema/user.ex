@@ -17,7 +17,7 @@ defmodule Leap.Accounts.Schema.User do
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
-  defenum StateEnum, ["new", "authenticated", "display_name_set", "categories_set", "onbaorded"]
+  defenum StateEnum, ["new", "authenticated", "display_name_set", "onbaorded"]
 
   defmodule StateMachine do
     @moduledoc "State machine for User. See Machinary docs for guards or callbacks if needed"
@@ -43,7 +43,7 @@ defmodule Leap.Accounts.Schema.User do
     pow_user_fields()
 
     # custom fields
-    field :state, StateEnum, default: "new"
+    field :state, StateEnum, default: "new", read_after_writes: true
     field :picture_url, :string
     field :display_name, :string
 

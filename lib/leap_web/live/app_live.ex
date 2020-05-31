@@ -8,6 +8,8 @@ defmodule LeapWeb.AppLive do
   alias Leap.Accounts
   alias Leap.Accounts.Schema.User
 
+  @onboarding_state [:authenticated, :display_name_set]
+
   def mount(_params, %{"current_user_id" => current_user_id}, socket) do
     current_user = Accounts.get!(User, current_user_id) |> user_authenticated()
     navbar_component = live_component(socket, LeapWeb.Components.Container.Navbar, id: "navbar")
@@ -24,8 +26,9 @@ defmodule LeapWeb.AppLive do
   def handle_params(
         _params,
         _uri,
-        %{assigns: %{current_user: %User{state: :authenticated} = current_user}} = socket
-      ) do
+        %{assigns: %{current_user: %User{state: state} = current_user}} = socket
+      )
+      when state in @onboarding_state do
     content_component =
       live_component(socket, LeapWeb.Components.Container.Onboarding,
         id: "onboarding",
