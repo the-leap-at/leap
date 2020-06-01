@@ -14,6 +14,7 @@ defmodule LeapWeb.Components.Main.UserOnboarding do
       field :module, module(), enforce: true
       field :current_user, User.t(), enforce: true
       field :user_changeset, Ecto.Changeset.t(User.t())
+      field :categories, [Category.t()], default: []
     end
   end
 
@@ -38,6 +39,33 @@ defmodule LeapWeb.Components.Main.UserOnboarding do
         %{assigns: %{state: state}} = socket
       ) do
     state = Mutation.transition_user_state(user_state, state)
+    {:ok, assign(socket, :state, state)}
+  end
+
+  def update(
+        %{action: :search_category, payload: search_term},
+        %{assigns: %{state: state}} = socket
+      ) do
+    state = Mutation.search_category(%{term: search_term}, state)
+
+    {:ok, assign(socket, :state, state)}
+  end
+
+  def update(
+        %{action: :add_user_fav_category, payload: params},
+        %{assigns: %{state: state}} = socket
+      ) do
+    state = Mutation.add_user_fav_category(params, state)
+
+    {:ok, assign(socket, :state, state)}
+  end
+
+  def update(
+        %{action: :remove_user_fav_category, payload: params},
+        %{assigns: %{state: state}} = socket
+      ) do
+    state = Mutation.remove_user_fav_category(params, state)
+
     {:ok, assign(socket, :state, state)}
   end
 

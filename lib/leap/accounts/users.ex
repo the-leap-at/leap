@@ -36,6 +36,12 @@ defmodule Leap.Accounts.Users do
     end
   end
 
+  @spec transition_state_to!(User.t(), next_state :: atom()) :: User.t()
+  def transition_state_to!(%User{} = user, next_state) when is_atom(next_state) do
+    {:ok, user} = Machinery.transition_to(user, User.StateMachine, next_state)
+    user
+  end
+
   @spec update(User.t(), attrs :: map()) ::
           {:ok, User.t()} | {:error, Ecto.Changeset.t(User.t())}
   def update(%User{} = user, attrs) do

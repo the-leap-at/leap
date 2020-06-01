@@ -14,10 +14,12 @@ defmodule Leap.Accounts.Schema.User do
   import EctoEnum
 
   alias Leap.Accounts.Users
+  alias Leap.Group.Schema.Category
+  alias Leap.Group.Schema.UserCategory
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
-  defenum StateEnum, ["new", "authenticated", "display_name_set", "onbaorded"]
+  defenum StateEnum, ["new", "authenticated", "display_name_set", "onboarded"]
 
   defmodule StateMachine do
     @moduledoc "State machine for User. See Machinary docs for guards or callbacks if needed"
@@ -26,8 +28,7 @@ defmodule Leap.Accounts.Schema.User do
       transitions: %{
         new: :authenticated,
         authenticated: :display_name_set,
-        display_name_set: :categories_set,
-        categories_set: :onbaorded
+        display_name_set: :onboarded
       }
 
     def persist(user, next_state) do
@@ -46,6 +47,8 @@ defmodule Leap.Accounts.Schema.User do
     field :state, StateEnum, default: "new", read_after_writes: true
     field :picture_url, :string
     field :display_name, :string
+
+    many_to_many :fav_categories, Category, join_through: UserCategory
 
     timestamps()
   end

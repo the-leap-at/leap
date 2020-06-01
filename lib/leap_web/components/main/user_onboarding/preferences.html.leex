@@ -1,3 +1,37 @@
-<div id="<%= @id %>">
-  PREFERENCES !!!
+
+<div class="" id="<%= @id %>">
+
+	<%= @category_form %>
+    <div class="field">
+      <div class="control">
+        <%= text_input @category_form, :query_term,
+        class: "input",
+        placeholder: "category filter"
+        %>
+      </div>
+    </div>
+	</form>
+
+	<div class="tags">
+		<%= for category <- @state.current_user.fav_categories do %>
+      <span class="tag is-success" phx-click="remove_category" phx-value-category_id="<%= category.id %>" phx-target="#<%= @id %>">
+        <%= category.name %>
+      </span>
+		<% end %>
+	</div>
+
+	<div class="tags">
+		<%= for category <- @state.categories do %>
+      <span class="tag" phx-click="add_category" phx-value-category_id="<%= category.id %>" phx-target="#<%= @id %>">
+        <%= category.name %>
+      </span>
+		<% end %>
+	</div>
+
+  <%= link to: "#", class: "button is-info", type: "button",  phx_click: "next",  phx_target: "##{@id}" do %>
+    <span>NEXT</span>
+    <span class="icon is-small">
+      <i class="fas fa-caret-right"></i>
+    </span>
+  <% end %>
 </div>

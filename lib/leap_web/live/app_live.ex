@@ -58,8 +58,18 @@ defmodule LeapWeb.AppLive do
     {:noreply, assign(socket, :content_component, content_component)}
   end
 
-  def handle_params(_params, _uri, %{assigns: %{live_action: :home}} = socket) do
-    {:noreply, assign(socket, :content_component, nil)}
+  def handle_params(
+        _params,
+        _uri,
+        %{assigns: %{current_user: %User{state: :onboarded} = current_user}} = socket
+      ) do
+    content_component =
+      live_component(socket, LeapWeb.Components.Container.Home,
+        id: "home",
+        current_user: current_user
+      )
+
+    {:noreply, assign(socket, :content_component, content_component)}
   end
 
   defp user_authenticated(%User{state: :new} = user),
