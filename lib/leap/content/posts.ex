@@ -1,7 +1,7 @@
 defmodule Leap.Content.Posts do
   @moduledoc """
   Functions specific to Posts.
-  The functions that are not exposed throught Content (defdelegate) are only context internal
+  The functions that are not exposed throught the context (defdelegate) are only context internal
   """
   alias Leap.Repo
   alias Leap.Content.Schema.Post
@@ -18,7 +18,7 @@ defmodule Leap.Content.Posts do
 
   @doc "Function used by Machinery to persist the state update"
   @spec update_state!(Post.t(), next_state :: Post.StateEnum.t()) :: Post.t()
-  def update_state!(post, next_state) do
+  def update_state!(%Post{} = post, next_state) do
     post
     |> Post.changeset_state_transition(%{state: next_state})
     |> Repo.update!()

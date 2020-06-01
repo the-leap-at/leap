@@ -1,6 +1,10 @@
 defmodule LeapWeb.Router do
   use LeapWeb, :router
   use Pow.Phoenix.Router
+
+  use Pow.Extension.Phoenix.Router,
+    extensions: [PowEmailConfirmation, PowResetPassword, PowPersistentSession]
+
   use PowAssent.Phoenix.Router
   import Phoenix.LiveView.Router
 
@@ -11,6 +15,9 @@ defmodule LeapWeb.Router do
     plug :put_root_layout, {LeapWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+
+    plug PowAssent.Plug.Reauthorization,
+      handler: PowAssent.Phoenix.ReauthorizationPlugHandler
   end
 
   pipeline :skip_csrf_protection do
@@ -42,15 +49,20 @@ defmodule LeapWeb.Router do
   scope "/" do
     pipe_through :browser
 
-    pow_session_routes()
+    pow_routes()
+    pow_extension_routes()
     pow_assent_routes()
   end
 
   scope "/", LeapWeb do
     pipe_through [:browser, :protected, :current_user]
+    # can use live_action when needed
+    # https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Router.html#live/4-actions-and-live-navigation
+    #    live "/", AppLive, :home
+    # the live action will be available in the assigns
+    # %{assigns: %{live_action: :home}}
 
-    live "/", AppLive, :home
-
+    live "/", AppLive
     live "/:container/:post_id", AppLive
   end
 

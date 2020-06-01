@@ -7,4 +7,6 @@ defmodule Leap.Group do
 
   ## CATEGORY ##
   defdelegate search_category(term), to: Categories, as: :search
+  defdelegate add_user_fav_category!(params), to: Categories, as: :add_user_fav!
+  defdelegate remove_user_fav_category!(params), to: Categories, as: :remove_user_fav!
 end

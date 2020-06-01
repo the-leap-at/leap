@@ -5,7 +5,9 @@ defmodule Leap.Group.Categories do
   """
   alias Leap.Repo
   import Ecto.Query, warn: false
+  alias Leap.Group
   alias Leap.Group.Schema.Category
+  alias Leap.Group.Schema.UserCategory
 
   @spec search(term :: binary()) :: [Category.t()]
   def search(term) do
@@ -29,5 +31,17 @@ defmodule Leap.Group.Categories do
       |> Enum.join(":* & ")
 
     term <> ":*"
+  end
+
+  @spec add_user_fav!(params :: map()) :: UserCategory.t()
+  def add_user_fav!(%{user_id: user_id, category_id: category_id}) do
+    Repo.insert!(%UserCategory{user_id: user_id, category_id: category_id})
+  end
+
+  @spec remove_user_fav!(params :: map()) :: UserCategory.t()
+  def remove_user_fav!(%{user_id: _, category_id: _} = params) do
+    UserCategory
+    |> Group.get_by!(params)
+    |> Repo.delete!()
   end
 end

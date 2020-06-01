@@ -17,19 +17,14 @@
       %>
 		</div>
 	</div>
-</form>
+	</form>
 
-<div class="tags">
-	<%= for category <- @state.categories do %>
-		<span
-					class="tag"
-					phx-click="update_category"
-					phx-value-category_id="<%= category.id %>"
-					phx-target="#<%= @id %>"
-				>
+	<div class="tags">
+		<%= for category <- @state.categories do %>
+		<span class="tag" phx-click="update_category" phx-value-category_id="<%= category.id %>" phx-target="#<%= @id %>">
 			<%= category.name %>
 		</span>
-	<% end %>
-</div>
+		<% end %>
+	</div>
 
 </div>

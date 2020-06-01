@@ -27,14 +27,14 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
     }
   end
 
-  defp post_behaviour(%Post{state: :new}), do: :edit_post
-  defp post_behaviour(%Post{state: :draft}), do: :edit_post
-  defp post_behaviour(%Post{state: :published}), do: :show_post
-
   @spec update(atom(), any(), State.t()) :: State.t()
   def update(key, value, state) do
     Map.replace!(state, key, value)
   end
+
+  defp post_behaviour(%Post{state: :new}), do: :edit_post
+  defp post_behaviour(%Post{state: :draft}), do: :edit_post
+  defp post_behaviour(%Post{state: :published}), do: :show_post
 
   @spec update_post(args :: map(), State.t()) :: State.t()
   def update_post(%{params: post_params}, state) do

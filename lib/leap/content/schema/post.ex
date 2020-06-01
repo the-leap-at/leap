@@ -36,8 +36,8 @@ defmodule Leap.Content.Schema.Post do
   schema "posts" do
     field :title, :string
     field :body, :string
-    field :type, TypeEnum
-    field :state, StateEnum, default: "new"
+    field :type, TypeEnum, read_after_writes: true
+    field :state, StateEnum, default: "new", read_after_writes: true
 
     many_to_many :children, Post,
       join_through: Leap.Content.Schema.PostRelation,
