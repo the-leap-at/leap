@@ -7,6 +7,7 @@ defmodule Leap.Content.Schema.Post do
   alias __MODULE__
   alias Leap.Content.Posts
   alias Leap.Group.Schema.Category
+  alias Leap.Accounts.Schema.User
 
   defenum StateEnum, ["new", "draft", "published"]
   defenum TypeEnum, ["question", "learn_path"]
@@ -48,6 +49,7 @@ defmodule Leap.Content.Schema.Post do
       join_keys: [child_id: :id, parent_id: :id]
 
     belongs_to :category, Category, on_replace: :delete
+    belongs_to :user, User
 
     timestamps()
   end

@@ -4,10 +4,73 @@ defmodule Leap.Content.Posts do
   The functions that are not exposed throught the context (defdelegate) are only context internal
   """
   alias Leap.Repo
+  alias Leap.Content
   alias Leap.Content.Schema.Post
+  alias Leap.Accounts.Schema.User
 
   @editable_state [:draft, :published]
   @publishable_state [:draft, :published]
+
+  # USER SCOPED
+
+  @doc "Machinery wrapper that converts errors to changest"
+  @spec transition_state_to(User.t(), Post.t(), next_state :: atom()) ::
+          {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
+  def transition_state_to(%User{} = user, %Post{} = post, next_state) when is_atom(next_state) do
+    with :ok <- Bodyguard.permit(Content, :post_mutation, user, post) do
+      case Machinery.transition_to(post, Post.StateMachine, next_state) do
+        {:ok, post} ->
+          {:ok, post}
+
+        {:error, cause} ->
+          changeset = Post.changeset_state_transition_error(post, %{state: next_state}, cause)
+          {:error, changeset}
+      end
+    end
+  end
+
+  @spec update(User.t(), Post.t(), attrs :: map()) ::
+          {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
+  @doc "when updating a new post, it transitions to draft state"
+  def update(%User{} = user, %Post{state: :new} = post, attrs) do
+    with {:ok, post} = transition_state_to(user, post, :draft) do
+      update(user, post, attrs)
+    end
+  end
+
+  def update(%User{} = user, %Post{state: state} = post, attrs) when state in @editable_state do
+    with :ok <- Bodyguard.permit(Content, :post_mutation, user, post) do
+      post
+      |> Post.changeset_update(attrs)
+      |> Repo.update()
+    end
+  end
+
+  @spec update!(User.t(), Post.t(), attrs :: map()) :: Post.t()
+  def update!(%User{} = user, %Post{} = post, attrs) do
+    Bodyguard.permit!(Content, :post_mutation, user, post)
+
+    post
+    |> Post.changeset_update(attrs)
+    |> Repo.update!()
+  end
+
+  @spec publish(User.t(), Post.t(), attrs :: map()) ::
+          {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
+  def publish(%User{} = user, %Post{state: state} = post, attrs)
+      when state in @publishable_state do
+    with :ok <- Bodyguard.permit(Content, :post_mutation, user, post),
+         changeset = Post.changeset_publish(post, attrs),
+         {:ok, post} <- Repo.update(changeset),
+         {:ok, post} <- transition_state_to_published(user, post) do
+      {:ok, post}
+    end
+  end
+
+  defp transition_state_to_published(_user, %Post{state: :published} = post), do: {:ok, post}
+  defp transition_state_to_published(user, post), do: transition_state_to(user, post, :published)
+
+  # UNSCOPED
 
   @spec create!(attrs :: map()) :: Post.t()
   def create!(attrs) do
@@ -23,55 +86,6 @@ defmodule Leap.Content.Posts do
     |> Post.changeset_state_transition(%{state: next_state})
     |> Repo.update!()
   end
-
-  @doc "Machinery wrapper that converts errors to changest"
-  @spec transition_state_to(Post.t(), next_state :: atom()) ::
-          {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
-  def transition_state_to(%Post{} = post, next_state) when is_atom(next_state) do
-    case Machinery.transition_to(post, Post.StateMachine, next_state) do
-      {:ok, post} ->
-        {:ok, post}
-
-      {:error, cause} ->
-        changeset = Post.changeset_state_transition_error(post, %{state: next_state}, cause)
-        {:error, changeset}
-    end
-  end
-
-  @spec update(Post.t(), attrs :: map()) ::
-          {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
-  @doc "when updating a new post, it transitions to draft state"
-  def update(%Post{state: :new} = post, attrs) do
-    with {:ok, post} = transition_state_to(post, :draft) do
-      update(post, attrs)
-    end
-  end
-
-  def update(%Post{state: state} = post, attrs) when state in @editable_state do
-    post
-    |> Post.changeset_update(attrs)
-    |> Repo.update()
-  end
-
-  @spec update!(Post.t(), attrs :: map()) :: Post.t()
-  def update!(%Post{} = post, attrs) do
-    post
-    |> Post.changeset_update(attrs)
-    |> Repo.update!()
-  end
-
-  @spec publish(Post.t(), attrs :: map()) ::
-          {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
-  def publish(%Post{state: state} = post, attrs) when state in @publishable_state do
-    with changeset = Post.changeset_publish(post, attrs),
-         {:ok, post} <- Repo.update(changeset),
-         {:ok, post} <- transition_state_to_published(post) do
-      {:ok, post}
-    end
-  end
-
-  defp transition_state_to_published(%Post{state: :published} = post), do: {:ok, post}
-  defp transition_state_to_published(post), do: transition_state_to(post, :published)
 
   @spec add_parent!(Post.t(), Post.t()) :: Post.t()
   def add_parent!(post, parent) do
