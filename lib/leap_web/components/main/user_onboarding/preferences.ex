@@ -1,8 +1,6 @@
 defmodule LeapWeb.Components.Main.UserOnboarding.Preferences do
   use LeapWeb, :component
 
-  alias Leap.Group.Schema.Category
-
   @delay 500
 
   def mount(socket) do
