@@ -72,6 +72,7 @@ defmodule LeapWeb.Components.Main.UserOnboarding do
   defp onboarding_step_component(%{current_user: %User{state: :authenticated}} = state, socket) do
     live_component(socket, LeapWeb.Components.Main.UserOnboarding.DisplayName,
       id: "display_name_" <> state.id,
+      action: :init,
       state: state
     )
   end
@@ -79,6 +80,7 @@ defmodule LeapWeb.Components.Main.UserOnboarding do
   defp onboarding_step_component(%{current_user: %User{state: :display_name_set}} = state, socket) do
     live_component(socket, LeapWeb.Components.Main.UserOnboarding.Preferences,
       id: "preferences_" <> state.id,
+      action: :init,
       state: state
     )
   end

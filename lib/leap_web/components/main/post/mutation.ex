@@ -14,12 +14,13 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
   @spec init(args :: map()) :: State.t()
-  def init(%{id: id, module: module, post: post}) do
+  def init(%{id: id, module: module, post: post, current_user: current_user}) do
     changeset = Content.change_post(post)
 
     %State{
       id: id,
       module: module,
+      current_user: current_user,
       post: post,
       post_changeset: changeset,
       post_behaviour: post_behaviour(post),
@@ -38,7 +39,7 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
 
   @spec update_post(args :: map(), State.t()) :: State.t()
   def update_post(%{params: post_params}, state) do
-    case Content.update_post(state.post, post_params) do
+    case Content.update_post(state.current_user, state.post, post_params) do
       {:ok, post} ->
         %State{
           state
@@ -53,7 +54,7 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
 
   @spec update_post_category(args :: map(), State.t()) :: State.t()
   def update_post_category(%{params: post_params}, state) do
-    post = Content.update_post!(state.post, post_params)
+    post = Content.update_post!(state.current_user, state.post, post_params)
 
     %State{
       state
@@ -70,7 +71,7 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
 
   @spec publish_post(args :: map(), State.t()) :: State.t()
   def publish_post(%{params: post_params}, state) do
-    case Content.publish_post(state.post, post_params) do
+    case Content.publish_post(state.current_user, state.post, post_params) do
       {:ok, post} ->
         %State{
           state

@@ -7,7 +7,7 @@ defmodule LeapWeb.Components.Main.UserOnboarding.DisplayName do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     display_name_form = display_name_form(assigns.id, assigns.state.user_changeset)
     assigns = Map.merge(assigns, %{display_name_form: display_name_form})
     {:ok, assign(socket, assigns)}

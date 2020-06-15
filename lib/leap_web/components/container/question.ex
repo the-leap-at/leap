@@ -8,7 +8,7 @@ defmodule LeapWeb.Components.Container.Question do
     {:ok, socket, temporary_assigns: [answers: []]}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     question = get_question(assigns.post_id)
 
     assigns = Map.merge(assigns, %{question: question, answers: question.children})
@@ -28,11 +28,12 @@ defmodule LeapWeb.Components.Container.Question do
     {:noreply, socket}
   end
 
-  defp post_component(post, socket) do
+  defp post_component(current_user, post, socket) do
     live_component(socket, LeapWeb.Components.Main.Post,
       id: "post_#{to_string(post.id)}",
-      post: post,
-      action: :init
+      action: :init,
+      current_user: current_user,
+      post: post
     )
   end
 

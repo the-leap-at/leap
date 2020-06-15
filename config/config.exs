@@ -36,8 +36,8 @@ config :leap, :pow,
   repo: Leap.Repo,
   cache_store_backend: Pow.Postgres.Store,
   web_module: LeapWeb,
-  extensions: [PowEmailConfirmation, PowResetPassword, PowPersistentSession],
   controller_callbacks: Pow.Extension.Phoenix.ControllerCallbacks,
+  extensions: [PowEmailConfirmation, PowResetPassword, PowPersistentSession],
   mailer_backend: Leap.Mailers.Pow
 
 # Configures Elixir's Logger

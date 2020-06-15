@@ -5,6 +5,7 @@ defmodule LeapWeb.Components.Main.Post do
   alias LeapWeb.Components.Main.Post.Mutation
   alias Leap.Content.Schema.Post
   alias Leap.Group.Schema.Category
+  alias Leap.Accounts.Schema.User
 
   defmodule State do
     @moduledoc false
@@ -13,6 +14,7 @@ defmodule LeapWeb.Components.Main.Post do
     typedstruct do
       field :id, String.t(), enforce: true
       field :module, module(), enforce: true
+      field :current_user, User.t()
       field :post, Post.t(), enforce: true
       field :post_changeset, Ecto.Changeset.t(Post.t())
       field :post_behaviour, atom(), default: :show_post, enforce: true
@@ -87,6 +89,7 @@ defmodule LeapWeb.Components.Main.Post do
   defp post_behaviour_component(%{post_behaviour: :show_post} = state, socket) do
     live_component(socket, LeapWeb.Components.Main.Post.Show,
       id: "show_post_" <> to_string(state.post.id),
+      action: :init,
       state: state
     )
   end
@@ -94,6 +97,7 @@ defmodule LeapWeb.Components.Main.Post do
   defp post_behaviour_component(%{post_behaviour: :edit_post} = state, socket) do
     live_component(socket, LeapWeb.Components.Main.Post.Edit,
       id: "edit_post_" <> to_string(state.post.id),
+      action: :init,
       state: state
     )
   end

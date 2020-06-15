@@ -7,7 +7,7 @@ defmodule LeapWeb.Components.Main.UserOnboarding.Preferences do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     category_form = search_category_form(assigns.id)
 
     assigns = Map.merge(assigns, %{category_form: category_form})

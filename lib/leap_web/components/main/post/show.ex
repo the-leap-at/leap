@@ -8,7 +8,7 @@ defmodule LeapWeb.Components.Main.Post.Show do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     {:ok, assign(socket, assigns)}
   end
 
@@ -21,6 +21,7 @@ defmodule LeapWeb.Components.Main.Post.Show do
   defp updates_component(id, state, socket) do
     live_component(socket, LeapWeb.Components.Main.Post.Show.Updates,
       id: "#{id}_update",
+      action: :init,
       state: state
     )
   end

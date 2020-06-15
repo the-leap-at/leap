@@ -28,11 +28,13 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <%= link "Sign Out", to: "/session", method: :delete, phx_click: "disconnect", phx_target: "##{@state.id}" , class: "button is-light" %>
+      <%= if @state.current_user do %>
+        <div class="navbar-item">
+          <div class="buttons">
+            <%= link "Sign Out #{@state.current_user.display_name}", to: "/session", method: :delete, phx_click: "disconnect", phx_target: "##{@state.id}" , class: "button is-light" %>
+          </div>
         </div>
-      </div>
+      <% end %>
     </div>
   </div>
 </nav>

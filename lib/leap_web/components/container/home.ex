@@ -5,7 +5,7 @@ defmodule LeapWeb.Components.Container.Home do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     {:ok, assign(socket, assigns)}
   end
 end

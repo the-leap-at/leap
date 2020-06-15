@@ -13,7 +13,7 @@ defmodule LeapWeb.Components.Main.Post.Edit.EditCategory do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     value = assigns.state.post.category && assigns.state.post.category.name
     category_form = search_category_form(assigns.id)
 

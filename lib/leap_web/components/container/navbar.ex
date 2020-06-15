@@ -5,12 +5,12 @@ defmodule LeapWeb.Components.Container.Navbar do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     navigation_component =
       live_component(socket, LeapWeb.Components.Main.Navigation,
         id: "navigation",
-        current_user: assigns.current_user,
-        action: :init
+        action: :init,
+        current_user: assigns.current_user
       )
 
     assigns = Map.merge(assigns, %{navigation_component: navigation_component})

@@ -1,7 +1,7 @@
 <div id="<%= @id %>">
 	<section class="section">
 		<div class="container">
-			<%= post_component(@question, @socket) %>
+			<%= post_component(@current_user, @question, @socket) %>
 		</div>
 	</section>
 
@@ -15,7 +15,7 @@
 		<%= for answer <- @answers do %>
 			<section class="section" id="answer_<%= answer.id %>">
 				<div class="container">
-					<%= post_component(answer, @socket) %>
+					<%= post_component(@current_user, answer, @socket) %>
 				</div>
 			</section>
 		<% end %>

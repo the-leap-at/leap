@@ -55,7 +55,7 @@ defmodule LeapWeb.Router do
   end
 
   scope "/", LeapWeb do
-    pipe_through [:browser, :protected, :current_user]
+    pipe_through [:browser, :current_user]
     # can use live_action when needed
     # https://hexdocs.pm/phoenix_live_view/Phoenix.LiveView.Router.html#live/4-actions-and-live-navigation
     #    live "/", AppLive, :home
@@ -64,6 +64,9 @@ defmodule LeapWeb.Router do
 
     live "/", AppLive
     live "/:container/:post_id", AppLive
+
+    # routes that require authentication
+    pipe_through [:protected]
   end
 
   # Other scopes may use custom stacks.
