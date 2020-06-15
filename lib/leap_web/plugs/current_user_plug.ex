@@ -14,10 +14,12 @@ defmodule LeapWeb.CurrentUserPlug do
         conn
         |> put_session(:current_user_id, current_user_id)
         |> put_session(:live_socket_id, "users_socket:#{current_user.id}")
-        |> assign(:conn, current_user)
+        |> assign(:current_user, current_user)
 
       _ ->
-        put_session(conn, :current_user_id, nil)
+        conn
+        |> delete_session(:live_socket_id)
+        |> delete_session(:current_user_id)
     end
   end
 
