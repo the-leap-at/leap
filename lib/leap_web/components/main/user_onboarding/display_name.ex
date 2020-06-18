@@ -32,6 +32,6 @@ defmodule LeapWeb.Components.Main.UserOnboarding.DisplayName do
   end
 
   defp allow_next?(state) do
-    state.current_user.display_name && state.user_changeset.valid?
+    not is_nil(state.current_user.display_name) && state.user_changeset.valid?
   end
 end

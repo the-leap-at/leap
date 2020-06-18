@@ -3,7 +3,9 @@ defmodule LeapWeb.Components.Main.Post do
   use TypedStruct
 
   alias LeapWeb.Components.Main.Post.Mutation
+  alias Leap.Content
   alias Leap.Content.Schema.Post
+  alias Leap.Group
   alias Leap.Group.Schema.Category
   alias Leap.Accounts.Schema.User
 
@@ -26,64 +28,40 @@ defmodule LeapWeb.Components.Main.Post do
     {:ok, socket}
   end
 
-  def update(%{action: :init} = assigns, socket) do
-    assigns = Map.merge(assigns, %{module: __MODULE__})
-    state = Mutation.init(assigns)
-    {:ok, assign(socket, :state, state)}
-  end
+  def update(%{action: :init, id: id, post: post, current_user: current_user}, socket) do
+    changeset = Content.change_post(post)
 
-  def update(
-        %{action: :update_post, payload: post_params},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.update_post(%{params: post_params}, state)
-
-    {:ok, assign(socket, :state, state)}
-  end
-
-  def update(
-        %{action: :update_post_category, payload: post_params},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.update_post_category(%{params: post_params}, state)
+    state = %State{
+      id: id,
+      module: __MODULE__,
+      current_user: current_user,
+      post: post,
+      post_changeset: changeset,
+      post_behaviour: post_behaviour(post),
+      categories: Group.all(Category)
+    }
 
     {:ok, assign(socket, :state, state)}
   end
 
-  def update(
-        %{action: :validate_publish_post, payload: post_params},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.validate_publish_post(%{params: post_params}, state)
+  def update(%{action: action, payload: attrs}, %{assigns: %{state: state}} = socket) do
+    mutation = Mutation.commit(action, attrs, state)
+    response(mutation, socket)
+  end
 
+  defp response({:ok, {%State{} = state, {type, message}}}, socket) do
+    socket = put_flash(socket, type, message)
     {:ok, assign(socket, :state, state)}
   end
 
-  def update(
-        %{action: :publish_post, payload: post_params},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.publish_post(%{params: post_params}, state)
-
+  defp response({:ok, %State{} = state}, socket) do
     {:ok, assign(socket, :state, state)}
   end
 
-  def update(
-        %{action: :search_category, payload: search_term},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.search_category(%{term: search_term}, state)
-
-    {:ok, assign(socket, :state, state)}
-  end
-
-  def update(
-        %{action: :edit_post},
-        %{assigns: %{state: state}} = socket
-      ) do
-    state = Mutation.change_post_behaviour(%{post_behaviour: :edit_post}, state)
-
-    {:ok, assign(socket, :state, state)}
+  defp response({:error, message}, socket) do
+    IO.inspect(message)
+    socket = put_flash(socket, :danger, message)
+    {:ok, socket}
   end
 
   defp post_behaviour_component(%{post_behaviour: :show_post} = state, socket) do
@@ -101,4 +79,8 @@ defmodule LeapWeb.Components.Main.Post do
       state: state
     )
   end
+
+  defp post_behaviour(%Post{state: :new}), do: :edit_post
+  defp post_behaviour(%Post{state: :draft}), do: :edit_post
+  defp post_behaviour(%Post{state: :published}), do: :show_post
 end

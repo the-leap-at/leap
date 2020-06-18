@@ -13,7 +13,7 @@ defmodule LeapWeb.Components.Main.Post.Show do
   end
 
   def handle_event("edit_post", _params, %{assigns: %{state: state}} = socket) do
-    send_to_main(:edit_post, %{}, state)
+    send_to_main(:change_post_behaviour, :edit_post, state)
 
     {:noreply, socket}
   end

@@ -33,7 +33,7 @@ defmodule Leap.Content.Posts do
           {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
   @doc "when updating a new post, it transitions to draft state"
   def update(%User{} = user, %Post{state: :new} = post, attrs) do
-    with {:ok, post} = transition_state_to(user, post, :draft) do
+    with {:ok, post} <- transition_state_to(user, post, :draft) do
       update(user, post, attrs)
     end
   end

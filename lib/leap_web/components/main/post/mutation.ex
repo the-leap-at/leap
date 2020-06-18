@@ -13,97 +13,89 @@ defmodule LeapWeb.Components.Main.Post.Mutation do
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
-  @spec init(args :: map()) :: State.t()
-  def init(%{id: id, module: module, post: post, current_user: current_user}) do
-    changeset = Content.change_post(post)
-
-    %State{
-      id: id,
-      module: module,
-      current_user: current_user,
-      post: post,
-      post_changeset: changeset,
-      post_behaviour: post_behaviour(post),
-      categories: Group.all(Category)
-    }
-  end
-
-  @spec update(atom(), any(), State.t()) :: State.t()
-  def update(key, value, state) do
-    Map.replace!(state, key, value)
-  end
-
-  defp post_behaviour(%Post{state: :new}), do: :edit_post
-  defp post_behaviour(%Post{state: :draft}), do: :edit_post
-  defp post_behaviour(%Post{state: :published}), do: :show_post
-
-  @spec update_post(args :: map(), State.t()) :: State.t()
-  def update_post(%{params: post_params}, state) do
+  @spec commit(atom(), any(), State.t()) :: State.t()
+  def commit(:update_post, post_params, state) do
     case Content.update_post(state.current_user, state.post, post_params) do
       {:ok, post} ->
-        %State{
+        state = %State{
           state
           | post: with_preloads(post),
             post_changeset: Content.change_post(post)
         }
 
-      {:error, changeset} ->
-        %State{state | post_changeset: changeset}
+        {:ok, state}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        state = %State{state | post_changeset: changeset}
+        {:ok, state}
+
+      {:error, message} ->
+        {:error, message}
     end
   end
 
-  @spec update_post_category(args :: map(), State.t()) :: State.t()
-  def update_post_category(%{params: post_params}, state) do
+  def commit(:update_post_category, post_params, state) do
     post = Content.update_post!(state.current_user, state.post, post_params)
 
-    %State{
+    state = %State{
       state
       | post: with_preloads(post)
     }
+
+    {:ok, state}
   end
 
-  @spec validate_publish_post(args :: map(), State.t()) :: State.t()
-  def validate_publish_post(%{params: post_params}, state) do
+  def commit(:validate_publish_post, post_params, state) do
     changeset = Content.validate_publish_post(state.post, post_params)
 
-    %State{state | post_changeset: changeset}
+    state = %State{state | post_changeset: changeset}
+    {:ok, state}
   end
 
-  @spec publish_post(args :: map(), State.t()) :: State.t()
-  def publish_post(%{params: post_params}, state) do
+  def commit(:publish_post, post_params, state) do
     case Content.publish_post(state.current_user, state.post, post_params) do
       {:ok, post} ->
-        %State{
+        state = %State{
           state
           | post: with_preloads(post),
             post_changeset: Content.change_post(post),
             post_behaviour: :show_post
         }
 
-      {:error, changeset} ->
-        %State{state | post_changeset: changeset}
+        {:ok, state}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        state = %State{state | post_changeset: changeset}
+        {:ok, state}
+
+      {:error, message} ->
+        {:error, message}
     end
   end
 
-  @spec search_category(args :: map(), State.t()) :: State.t()
-  def search_category(%{term: term}, state) when is_present(term) do
+  def commit(:search_category, term, state) when is_present(term) do
     categories = Group.search_category(term)
-    %State{state | categories: categories}
+    state = %State{state | categories: categories}
+    {:ok, state}
   end
 
-  def search_category(_args, state) do
+  def commit(:search_category, _term, state) do
     categories = Group.all(Category)
-    %State{state | categories: categories}
+    state = %State{state | categories: categories}
+    {:ok, state}
   end
 
-  @spec change_post_behaviour(args :: map(), State.t()) :: State.t()
-  def change_post_behaviour(%{post_behaviour: post_behaviour}, state) do
-    %State{
+  def commit(:change_post_behaviour, post_behaviour, state) do
+    state = %State{
       state
       | post_behaviour: post_behaviour,
         post_changeset: Content.change_post(state.post)
     }
+
+    {:ok, state}
   end
+
+  ######
 
   defp with_preloads(%Post{} = post) do
     Content.with_preloads(post, [:category], force: true)

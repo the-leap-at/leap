@@ -57,7 +57,7 @@ defmodule LeapWeb.AppLive do
   def handle_params(
         %{"container" => "learn_path", "post_id" => post_id},
         _uri,
-        %{assigns: %{current_user: %User{state: :onboarded} = current_user}} = socket
+        %{assigns: %{current_user: current_user}} = socket
       ) do
     content_component =
       live_component(socket, LeapWeb.Components.Container.LearnPath,
@@ -73,7 +73,7 @@ defmodule LeapWeb.AppLive do
   def handle_params(
         %{"container" => "question", "post_id" => post_id},
         _uri,
-        %{assigns: %{current_user: %User{state: :onboarded} = current_user}} = socket
+        %{assigns: %{current_user: current_user}} = socket
       ) do
     content_component =
       live_component(socket, LeapWeb.Components.Container.Question,
