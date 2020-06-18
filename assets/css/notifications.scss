@@ -1,0 +1,14 @@
+.leap-notifications {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 60px;
+  z-index: 100;
+  .section {
+    padding-top: 0;
+    padding-bottom: 0;
+    .notification {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+}

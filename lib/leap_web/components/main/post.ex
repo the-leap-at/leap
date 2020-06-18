@@ -50,7 +50,7 @@ defmodule LeapWeb.Components.Main.Post do
   end
 
   defp response({:ok, {%State{} = state, {type, message}}}, socket) do
-    socket = put_flash(socket, type, message)
+    send_notification(state.id, type, message)
     {:ok, assign(socket, :state, state)}
   end
 
@@ -59,8 +59,7 @@ defmodule LeapWeb.Components.Main.Post do
   end
 
   defp response({:error, message}, socket) do
-    IO.inspect(message)
-    socket = put_flash(socket, :danger, message)
+    send_notification(socket.assigns.state.id, :danger, message)
     {:ok, socket}
   end
 

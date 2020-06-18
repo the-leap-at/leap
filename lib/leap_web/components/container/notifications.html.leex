@@ -1,0 +1,15 @@
+<div id="<%= @id %>" class="leap-notifications">
+  <%= if length(@notifications) >0 do %>
+    <section class="section">
+      <div class="container">
+        <div id="notif", phx-update="append">
+          <%= for notification <- @notifications do %>
+            <div id="<%= notification.message %>">
+              <%= notification_component(notification, @socket) %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  <% end %>
+</div>

@@ -125,6 +125,15 @@ defmodule LeapWeb do
         send(self(), {:delay_action, delay, {state.module, state.id, action, payload}})
       end
 
+      def send_notification(sender_id, type, message) do
+        send(
+          self(),
+          {:perform_action,
+           {LeapWeb.Components.Container.Notifications, "notifications", :notify,
+            %{sender_id: sender_id, type: type, message: message}}}
+        )
+      end
+
       def markdown_to_html(body) do
         safe =
           body

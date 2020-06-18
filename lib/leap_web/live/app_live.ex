@@ -20,7 +20,17 @@ defmodule LeapWeb.AppLive do
         current_user: socket.assigns.current_user
       )
 
-    socket = assign(socket, :navbar_component, navbar_component)
+    notifications_component =
+      live_component(socket, LeapWeb.Components.Container.Notifications,
+        action: :init,
+        id: "notifications"
+      )
+
+    socket =
+      assign(socket, %{
+        notifications_component: notifications_component,
+        navbar_component: navbar_component
+      })
 
     {:ok, socket}
   end
@@ -33,7 +43,18 @@ defmodule LeapWeb.AppLive do
         current_user: nil
       )
 
-    socket = assign(socket, %{navbar_component: navbar_component, current_user: nil})
+    notifications_component =
+      live_component(socket, LeapWeb.Components.Container.Notifications,
+        action: :init,
+        id: "notifications"
+      )
+
+    socket =
+      assign(socket, %{
+        navbar_component: navbar_component,
+        notifications_component: notifications_component,
+        current_user: nil
+      })
 
     {:ok, socket}
   end

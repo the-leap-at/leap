@@ -21,6 +21,7 @@ defmodule LeapWeb.Components.Container.Question do
       |> Content.create_post!()
       |> Content.add_post_parent!(socket.assigns.question)
 
+    # TODO verify if refetch still needed after read_after_writes
     answer = get_answer(answer.id)
 
     socket = assign(socket, :answers, [answer])

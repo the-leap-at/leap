@@ -2,7 +2,16 @@
 @import '~bulma/sass/utilities/functions';
 @import './colors';
 @import './phx';
-@import '../node_modules/bulma/sass/utilities/derived-variables.sass';
+@import './notifications';
+
+// Example
+// $pink: #ffb3b3;
+// $pink-invert: #fff;
+// $primary: $pink;
+// $primary-invert: $pink-invert;
+
+@import '~bulma/sass/utilities/derived-variables';
+@import '~bulma/sass/utilities/mixins';
 $addColors: ();
 $colors: map-merge($colors, $addColors);
 
