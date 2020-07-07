@@ -16,7 +16,7 @@ defmodule Leap.Group.Categories do
     where(
       Category,
       fragment(
-        "to_tsvector('english', coalesce(name, ' ')) @@ to_tsquery(?)",
+        "name @@ to_tsquery(?)",
         ^term
       )
     )

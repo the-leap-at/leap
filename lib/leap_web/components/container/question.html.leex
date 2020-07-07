@@ -11,7 +11,7 @@
 		</div>
 	</section>
 
-	<div id="answers", phx-update="append">
+	<div id="answers" phx-update="append">
 		<%= for answer <- @answers do %>
 			<section class="section" id="answer_<%= answer.id %>">
 				<div class="container">

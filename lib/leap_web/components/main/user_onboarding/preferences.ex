@@ -55,7 +55,6 @@ defmodule LeapWeb.Components.Main.UserOnboarding.Preferences do
   def handle_event("next", _params, %{assigns: %{state: state}} = socket) do
     send_to_main(:transition_user_state, :onboarded, state)
 
-    # {:noreply, push_patch(socket, to: "/")}
     {:noreply, socket}
   end
 
