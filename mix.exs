@@ -36,7 +36,7 @@ defmodule Leap.MixProject do
       {:phoenix, "~> 1.5"},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
-      {:phoenix_live_view, "~> 0.13"},
+      {:phoenix_live_view, "~> 0.14"},
       {:ecto_sql, "~> 3.1"},
       {:ecto_enum, "~> 1.4"},
       {:postgrex, ">= 0.0.0"},

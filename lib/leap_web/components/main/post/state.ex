@@ -1,6 +1,6 @@
 defmodule LeapWeb.Components.Main.Post.State do
   @moduledoc """
-  Mutations for Post
+  Post State
   """
 
   use TypedStruct

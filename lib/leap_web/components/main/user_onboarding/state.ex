@@ -1,98 +1,117 @@
-defmodule LeapWeb.Components.Main.UserOnboarding.Mutation do
+defmodule LeapWeb.Components.Main.UserOnboarding.State do
   @moduledoc """
-  Mutations for UserOnboarding
+  UserOnboarding State
   """
+  use TypedStruct
+
+  alias __MODULE__
+  alias LeapWeb.Components.State, as: StateBehaviour
 
   alias Leap.Accounts
   alias Leap.Accounts.Schema.User
   alias Leap.Group
   alias Leap.Group.Schema.Category
 
-  alias LeapWeb.Components.Main.UserOnboarding.State
+  @behaviour StateBehaviour
+
+  @typedoc "UserOnboarding state"
+  typedstruct do
+    field :id, String.t(), enforce: true
+    field :module, module(), enforce: true
+    field :current_user, User.t(), enforce: true
+    field :user_changeset, Ecto.Changeset.t(User.t())
+    field :categories, [Category.t()], default: []
+  end
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
-  @spec init(args :: map()) :: State.t()
-  def init(%{id: id, module: module, current_user: current_user}) do
+  @impl StateBehaviour
+  def init(%{id: id, current_user: current_user}) do
     current_user = with_preloads(current_user)
     changeset = Accounts.change_user(current_user)
     categories = Group.all(Category)
 
-    %State{
+    state = %State{
       id: id,
-      module: module,
+      module: LeapWeb.Components.Main.UserOnboarding,
       current_user: current_user,
       user_changeset: changeset,
       categories: remaining_categories(categories, current_user)
     }
+
+    {:ok, state}
   end
 
-  @spec update(atom(), any(), State.t()) :: State.t()
-  def update(key, value, state) do
-    Map.replace!(state, key, value)
-  end
-
-  @spec update_user(map(), State.t()) :: State.t()
-  def update_user(%{params: user_params}, state) do
+  @impl StateBehaviour
+  def commit(:update_user, user_params, state) do
     case Accounts.update_user(state.current_user, user_params) do
       {:ok, user} ->
-        %State{
+        state = %State{
           state
           | current_user: user,
             user_changeset: Accounts.change_user(user)
         }
 
+        {:ok, state}
+
       {:error, changeset} ->
-        %State{state | user_changeset: changeset}
+        state = %State{state | user_changeset: changeset}
+        {:ok, {state, {:warning, "Something went wrong"}}}
     end
   end
 
-  @spec transition_user_state(atom(), State.t()) :: State.t()
-  def transition_user_state(user_state, state) do
+  def commit(:transition_user_state, user_state, state) do
+    IO.inspect("set state")
+    IO.inspect(user_state)
     user = Accounts.transition_user_state_to!(state.current_user, user_state)
 
-    %State{
+    state = %State{
       state
       | current_user: user,
         user_changeset: Accounts.change_user(user)
     }
+
+    {:ok, state}
   end
 
-  @spec search_category(args :: map(), State.t()) :: State.t()
-  def search_category(%{term: term}, state) when is_present(term) do
+  def commit(:search_category, term, state) when is_present(term) do
     categories = Group.search_category(term)
-    %State{state | categories: remaining_categories(categories, state.current_user)}
+    state = %State{state | categories: remaining_categories(categories, state.current_user)}
+    {:ok, state}
   end
 
-  def search_category(_args, state) do
+  def commit(:search_category, _term, state) do
     categories = Group.all(Category)
-    %State{state | categories: remaining_categories(categories, state.current_user)}
+    state = %State{state | categories: remaining_categories(categories, state.current_user)}
+    {:ok, state}
   end
 
-  @spec add_user_fav_category(args :: map(), State.t()) :: State.t()
-  def add_user_fav_category(args, state) do
+  def commit(:add_user_fav_category, args, state) do
     Group.add_user_fav_category!(args)
     categories = Group.all(Category)
     current_user = with_preloads(state.current_user)
 
-    %State{
+    state = %State{
       state
       | current_user: current_user,
         categories: remaining_categories(categories, current_user)
     }
+
+    {:ok, state}
   end
 
-  @spec remove_user_fav_category(args :: map(), State.t()) :: State.t()
-  def remove_user_fav_category(args, state) do
+  def commit(:remove_user_fav_category, args, state) do
     Group.remove_user_fav_category!(args)
     categories = Group.all(Category)
     current_user = with_preloads(state.current_user)
 
-    %State{
+    state = %State{
       state
       | current_user: current_user,
         categories: remaining_categories(categories, current_user)
     }
+
+    {:ok, state}
   end
 
   defp with_preloads(%User{} = user) do

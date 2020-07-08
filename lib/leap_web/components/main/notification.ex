@@ -2,7 +2,7 @@ defmodule LeapWeb.Components.Main.Notification do
   use LeapWeb, :component
   use TypedStruct
 
-  @dismiss_delay 30000
+  @dismiss_delay 5000
 
   defmodule State do
     @moduledoc false
@@ -24,8 +24,6 @@ defmodule LeapWeb.Components.Main.Notification do
   end
 
   def update(%{action: :init, id: id, notification: notification}, socket) do
-    IO.inspect(notification)
-
     state = %State{
       id: id,
       module: __MODULE__,
