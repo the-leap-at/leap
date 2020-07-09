@@ -2,7 +2,7 @@ defmodule LeapWeb.Components.Main.Notification do
   use LeapWeb, :component
   use TypedStruct
 
-  @dismiss_delay 5000
+  @display_timeout 5000
 
   defmodule State do
     @moduledoc false
@@ -16,6 +16,7 @@ defmodule LeapWeb.Components.Main.Notification do
       field :type, notification_type(), enforce: true
       field :message, String.t(), enforce: true
       field :display, boolean(), default: true
+      field :display_timeout, :default | :none | integer(), enforce: true
     end
   end
 
@@ -23,15 +24,19 @@ defmodule LeapWeb.Components.Main.Notification do
     {:ok, socket}
   end
 
-  def update(%{action: :init, id: id, notification: notification}, socket) do
+  def update(
+        %{action: :init, id: id, notification: notification},
+        socket
+      ) do
     state = %State{
       id: id,
       module: __MODULE__,
       type: notification.type,
-      message: notification.message
+      message: notification.message,
+      display_timeout: notification.display_timeout
     }
 
-    delay_send_to_main(@dismiss_delay, :dismiss, %{}, state)
+    dismiss_notification(state)
 
     {:ok, assign(socket, :state, state)}
   end
@@ -47,4 +52,15 @@ defmodule LeapWeb.Components.Main.Notification do
 
     {:noreply, assign(socket, :state, state)}
   end
+
+  defp dismiss_notification(%State{display_timeout: :none}), do: nil
+
+  defp dismiss_notification(%State{display_timeout: :default} = state),
+    do: delay_send_to_main(@display_timeout, :dismiss, %{}, state)
+
+  defp dismiss_notification(%State{display_timeout: timeout} = state) when is_integer(timeout),
+    do: delay_send_to_main(timeout, :dismiss, %{}, state)
+
+  defp dismiss_notification(state),
+    do: delay_send_to_main(@display_timeout, :dismiss, %{}, state)
 end

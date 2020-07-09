@@ -2,7 +2,7 @@
   <%= if @state.display do %>
     <div class="notification <%= "is-" <> to_string(@state.type) %>">
       <button class="delete" phx-click="dismiss" phx-target="#<%= @state.id %>"></button>
-      <%= @state.message %>
+      <%= markdown_to_html(@state.message) %>
     </div>
   <% end %>
 </div>

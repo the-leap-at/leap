@@ -23,7 +23,8 @@ defmodule LeapWeb.AppLive do
     notifications_component =
       live_component(socket, LeapWeb.Components.Container.Notifications,
         action: :init,
-        id: "notifications"
+        id: "notifications",
+        current_user: socket.assigns.current_user
       )
 
     socket =
@@ -46,7 +47,8 @@ defmodule LeapWeb.AppLive do
     notifications_component =
       live_component(socket, LeapWeb.Components.Container.Notifications,
         action: :init,
-        id: "notifications"
+        id: "notifications",
+        current_user: nil
       )
 
     socket =
