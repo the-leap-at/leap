@@ -2,55 +2,39 @@ defmodule LeapWeb.Components.Main.Notification do
   use LeapWeb, :component
   use TypedStruct
 
+  alias LeapWeb.Components.Main.Notification.State
+
   @display_timeout 5000
-
-  defmodule State do
-    @moduledoc false
-
-    @type notification_type() :: :info | :success | :warning | :danger
-
-    @typedoc "Notification state"
-    typedstruct do
-      field :id, String.t(), enforce: true
-      field :module, module(), enforce: true
-      field :type, notification_type(), enforce: true
-      field :message, String.t(), enforce: true
-      field :display, boolean(), default: true
-      field :display_timeout, :default | :none | integer(), enforce: true
-    end
-  end
 
   def mount(socket) do
     {:ok, socket}
   end
 
-  def update(
-        %{action: :init, id: id, notification: notification},
-        socket
-      ) do
-    state = %State{
-      id: id,
-      module: __MODULE__,
-      type: notification.type,
-      message: notification.message,
-      display_timeout: notification.display_timeout
-    }
-
+  def update(%{action: :init} = assigns, socket) do
+    mutation = {:ok, state} = State.init(assigns)
     dismiss_notification(state)
 
-    {:ok, assign(socket, :state, state)}
+    response(mutation, socket)
   end
 
-  def update(%{action: :dismiss}, %{assigns: %{state: state}} = socket) do
-    state = %State{state | display: false}
-
-    {:ok, assign(socket, :state, state)}
+  def update(%{action: action, payload: attrs}, %{assigns: %{state: state}} = socket) do
+    mutation = State.commit(action, attrs, state)
+    response(mutation, socket)
   end
 
   def handle_event("dismiss", _params, %{assigns: %{state: state}} = socket) do
     state = %State{state | display: false}
 
     {:noreply, assign(socket, :state, state)}
+  end
+
+  defp response({:ok, %State{} = state}, socket) do
+    {:ok, assign(socket, :state, state)}
+  end
+
+  # ignoring bad notifications
+  defp response(_mutation, socket) do
+    {:ok, socket}
   end
 
   defp dismiss_notification(%State{display_timeout: :none}), do: nil
