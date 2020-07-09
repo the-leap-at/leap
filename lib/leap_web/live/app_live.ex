@@ -65,8 +65,6 @@ defmodule LeapWeb.AppLive do
         %{assigns: %{current_user: %User{state: state} = current_user}} = socket
       )
       when state in @onboarding_state do
-    IO.inspect("DO I END HERE????")
-
     content_component =
       live_component(socket, LeapWeb.Components.Container.Onboarding,
         action: :init,
@@ -98,8 +96,6 @@ defmodule LeapWeb.AppLive do
         _uri,
         %{assigns: %{current_user: current_user}} = socket
       ) do
-    IO.inspect("IM IN THE QUESTION")
-
     content_component =
       live_component(socket, LeapWeb.Components.Container.Question,
         action: :init,

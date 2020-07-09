@@ -61,8 +61,6 @@ defmodule LeapWeb.Components.Main.UserOnboarding.State do
   end
 
   def commit(:transition_user_state, user_state, state) do
-    IO.inspect("set state")
-    IO.inspect(user_state)
     user = Accounts.transition_user_state_to!(state.current_user, user_state)
 
     state = %State{
