@@ -13,7 +13,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init, state: %{authorize_post_mutation: true}} = assigns, socket) do
     post_form = post_form(assigns.id, assigns.state.post_changeset)
     assigns = Map.merge(assigns, %{post_form: post_form})
 
@@ -64,6 +64,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
   defp markdown_textarea_component(id, post_form, state, socket) do
     live_component(socket, LeapWeb.Components.Shared.MarkdownTextarea,
       id: "#{id}_body",
+      action: :init,
       post_form: post_form,
       field: :body,
       value: Content.get_field(state.post_changeset, :body)
@@ -73,6 +74,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
   defp edit_category_component(id, post_form, state, socket) do
     live_component(socket, LeapWeb.Components.Main.Post.Edit.EditCategory,
       id: "#{id}_category",
+      action: :init,
       post_form: post_form,
       state: state
     )

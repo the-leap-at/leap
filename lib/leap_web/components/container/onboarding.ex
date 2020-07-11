@@ -5,12 +5,12 @@ defmodule LeapWeb.Components.Container.Onboarding do
     {:ok, socket}
   end
 
-  def update(assigns, socket) do
+  def update(%{action: :init} = assigns, socket) do
     user_onboarding_component =
       live_component(socket, LeapWeb.Components.Main.UserOnboarding,
         id: "onboarding_user_#{to_string(assigns.current_user.id)}",
-        current_user: assigns.current_user,
-        action: :init
+        action: :init,
+        current_user: assigns.current_user
       )
 
     assigns = Map.merge(assigns, %{user_onboarding_component: user_onboarding_component})

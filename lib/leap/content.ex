@@ -5,13 +5,23 @@ defmodule Leap.Content do
 
   alias Leap.Content.Posts
 
-  ## POST ##
+  # AUTHORIZATION
+
+  defdelegate authorize(action, user, params), to: Leap.Content.Policy
+
+  # POST
+
+  ## USER SCOPED
+
+  defdelegate update_post(user, post, attrs), to: Posts, as: :update
+  defdelegate update_post!(user, post, attrs), to: Posts, as: :update!
+  defdelegate publish_post(user, post, attrs), to: Posts, as: :publish
+
+  ## UNSCOPED
+
   defdelegate create_post!(attrs), to: Posts, as: :create!
-  defdelegate update_post(post, attrs), to: Posts, as: :update
-  defdelegate update_post!(post, attrs), to: Posts, as: :update!
-  defdelegate publish_post(post, attrs), to: Posts, as: :publish
-  defdelegate validate_publish_post(post, attrs \\ %{}), to: Posts, as: :validate_publish
   defdelegate add_post_parent!(post, parent), to: Posts, as: :add_parent!
   defdelegate add_post_child!(post, child), to: Posts, as: :add_child!
+  defdelegate validate_publish_post(post, attrs \\ %{}), to: Posts, as: :validate_publish
   defdelegate change_post(post, attrs \\ %{}), to: Posts, as: :change
 end

@@ -9,11 +9,14 @@ defmodule Leap.Repo.Migrations.CreatePostsTable do
       add :type, :string, null: false
 
       add :category_id, references(:categories)
+      add :user_id, references(:users)
 
       timestamps()
     end
 
     create index(:posts, [:state])
     create index(:posts, [:type])
+    create index(:posts, [:category_id])
+    create index(:posts, [:user_id])
   end
 end

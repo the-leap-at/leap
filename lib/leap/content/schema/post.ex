@@ -7,6 +7,7 @@ defmodule Leap.Content.Schema.Post do
   alias __MODULE__
   alias Leap.Content.Posts
   alias Leap.Group.Schema.Category
+  alias Leap.Accounts.Schema.User
 
   defenum StateEnum, ["new", "draft", "published"]
   defenum TypeEnum, ["question", "learn_path"]
@@ -48,13 +49,17 @@ defmodule Leap.Content.Schema.Post do
       join_keys: [child_id: :id, parent_id: :id]
 
     belongs_to :category, Category, on_replace: :delete
+    belongs_to :user, User
 
     timestamps()
   end
 
   def changeset_create(post, attrs) do
     post
-    |> cast(attrs, [:type])
+    |> cast(attrs, [:type, :user_id, :category_id])
+    |> validate_required([:type, :user_id])
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:category)
   end
 
   def changeset_update(post, attrs) do

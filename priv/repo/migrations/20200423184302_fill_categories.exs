@@ -36,7 +36,7 @@ defmodule Leap.Repo.Migrations.FillCategories do
   end
 
   def down do
-    execute("DROP INDEX users_trgm_idx")
+    execute("DROP INDEX categories_trgm_index")
     nil
   end
 end

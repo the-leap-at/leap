@@ -1,4 +1,4 @@
-defmodule LeapWeb.Components.Container.Home do
+defmodule LeapWeb.Components.Main.UserOnboarding.Finish do
   use LeapWeb, :component
 
   def mount(socket) do

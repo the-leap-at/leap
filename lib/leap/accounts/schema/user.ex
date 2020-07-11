@@ -16,6 +16,7 @@ defmodule Leap.Accounts.Schema.User do
   alias Leap.Accounts.Users
   alias Leap.Group.Schema.Category
   alias Leap.Group.Schema.UserCategory
+  alias Leap.Content.Schema.Post
 
   defguard is_present(value) when is_binary(value) and bit_size(value) > 0
 
@@ -49,6 +50,7 @@ defmodule Leap.Accounts.Schema.User do
     field :display_name, :string
 
     many_to_many :fav_categories, Category, join_through: UserCategory
+    has_many :posts, Post
 
     timestamps()
   end
