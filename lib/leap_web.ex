@@ -142,6 +142,7 @@ defmodule LeapWeb do
       def markdown_to_html(body) do
         safe =
           body
+          |> to_string()
           |> Earmark.as_html!(breaks: true)
           |> HtmlSanitizeEx.markdown_html()
 

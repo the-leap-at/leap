@@ -1,30 +1,30 @@
 <div id="<%= @id %>">
-	<section class="section">
-		<div class="container">
-			<%= post_component(@current_user, @question, @socket) %>
-		</div>
-	</section>
-
-	<section class="section">
-		<div class="container">
-			<h1 class="title">ANSWERS</h1>
-		</div>
-	</section>
-
-	<div id="answers" phx-update="append">
-		<%= for answer <- @answers do %>
-			<section class="section" id="answer_<%= answer.id %>">
-				<div class="container">
-					<%= post_component(@current_user, answer, @socket) %>
-				</div>
-			</section>
-		<% end %>
-	</div>
-
-	<section class="section">
-		<div class="container">
-			# TODO: when user will be in place, show button only if all user posts are published
-			<button class="button is-primary is-fullwidth" type="button" phx-click="add_answer" phx-target="#<%= @id %>">ADD ANSWER</button>
-		</div>
-	</section>
+  <section class="section">
+    <div class="container">
+      <%= post_component(@current_user, @question, @socket) %>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <h1 class="title">ANSWERS</h1>
+    </div>
+  </section>
+  <div id="answers" phx-update="append">
+    <%= for answer <- @answers do %>
+      <%= if display_answer(@current_user, answer) do %>
+        <section class="section" id="answer_<%= answer.id %>">
+          <div class="container">
+            <%= post_component(@current_user, answer, @socket) %>
+          </div>
+        </section>
+      <% end %>
+    <% end %>
+  </div>
+  <%= if display_add_answer(@current_user, @question, @answers) do %>
+    <section class="section">
+      <div class="container">
+        <button class="button is-primary is-fullwidth" type="button" phx-click="add_answer" phx-target="#<%= @id %>">ADD ANSWER</button>
+      </div>
+    </section>
+  <% end %>
 </div>

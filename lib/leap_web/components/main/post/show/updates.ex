@@ -12,7 +12,7 @@ defmodule LeapWeb.Components.Main.Post.Show.Updates do
     {:ok, assign(socket, :edit, false)}
   end
 
-  def update(%{action: :init} = assigns, socket) do
+  def update(%{action: :init, state: %{authorize_post_mutation: true}} = assigns, socket) do
     post_form = post_form(assigns.id, assigns.state.post_changeset)
 
     assigns = Map.merge(assigns, %{post_form: post_form})

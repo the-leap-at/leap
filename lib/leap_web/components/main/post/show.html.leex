@@ -1,11 +1,15 @@
 <div id="<%= @id %>">
+	<h1 class="title"><%= @state.post.title %></h1>
 	<div class="subtitle">
 		Category: <%= @state.post.category.name %>
 	</div>
-	<%= updates_component(@id, @state, @socket) %>
-	<h1 class="title"><%= @state.post.title %></h1>
+	<%= if @state.authorize_post_mutation do %>
+		<%= updates_component(@id, @state, @socket) %>
+	<% end %>
 	<div class="content">
 		<%= markdown_to_html(@state.post.body) %>
 	</div>
-	<button class="button is-info is-small" type="button" phx-click="edit_post" phx-target="#<%= @id %>">Edit Post</button>
+	<%= if @state.authorize_post_mutation do %>
+		<button class="button is-info is-small" type="button" phx-click="edit_post" phx-target="#<%= @id %>">Edit Post</button>
+	<% end %>
 </div>

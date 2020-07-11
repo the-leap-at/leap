@@ -56,7 +56,10 @@ defmodule Leap.Content.Schema.Post do
 
   def changeset_create(post, attrs) do
     post
-    |> cast(attrs, [:type])
+    |> cast(attrs, [:type, :user_id, :category_id])
+    |> validate_required([:type, :user_id])
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:category)
   end
 
   def changeset_update(post, attrs) do

@@ -61,6 +61,7 @@ defmodule LeapWeb.AppLive do
     {:ok, socket}
   end
 
+  # logged in user but not onboarded, should finish onboarding
   def handle_params(
         _params,
         _uri,
@@ -112,24 +113,13 @@ defmodule LeapWeb.AppLive do
   def handle_params(
         _params,
         _uri,
-        %{assigns: %{current_user: %User{state: :onboarded} = current_user}} = socket
+        %{assigns: %{current_user: current_user}} = socket
       ) do
     content_component =
       live_component(socket, LeapWeb.Components.Container.Home,
         action: :init,
         id: "home",
         current_user: current_user
-      )
-
-    {:noreply, assign(socket, :content_component, content_component)}
-  end
-
-  def handle_params(_params, _uri, socket) do
-    content_component =
-      live_component(socket, LeapWeb.Components.Container.Home,
-        action: :init,
-        id: "home",
-        current_user: nil
       )
 
     {:noreply, assign(socket, :content_component, content_component)}

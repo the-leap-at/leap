@@ -22,6 +22,7 @@ defmodule LeapWeb.Components.Main.Post.State do
     field :module, module(), enforce: true
     field :current_user, User.t()
     field :post, Post.t(), enforce: true
+    field :authorize_post_mutation, boolean, enforce: true
     field :post_changeset, Ecto.Changeset.t(Post.t())
     field :post_behaviour, atom(), default: :show_post, enforce: true
     field :categories, [Category.t()], default: []
@@ -38,12 +39,20 @@ defmodule LeapWeb.Components.Main.Post.State do
       module: LeapWeb.Components.Main.Post,
       current_user: current_user,
       post: post,
+      authorize_post_mutation: authorize_post_mutation(current_user, post),
       post_changeset: changeset,
       post_behaviour: post_behaviour(post),
       categories: Group.all(Category)
     }
 
     {:ok, state}
+  end
+
+  defp authorize_post_mutation(user, post) do
+    case Bodyguard.permit(Content, :post_mutation, user, post) do
+      :ok -> true
+      _ -> false
+    end
   end
 
   @impl StateBehaviour
