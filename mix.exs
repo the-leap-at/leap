@@ -50,7 +50,7 @@ defmodule Leap.MixProject do
       {:machinery, "~> 1.0.0"},
       {:html_sanitize_ex, "~> 1.3.0"},
       {:earmark, "~> 1.4.3"},
-      {:timex, "~> 3.5"},
+      {:timex, "~> 3.6"},
       {:pow, "~> 1.0"},
       {:pow_postgres_store, "~> 1.0.0-rc2"},
       {:pow_assent, "~> 0.4"},

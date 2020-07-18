@@ -5,36 +5,33 @@
   aria-label="main navigation"
 >
   <div class="navbar-brand">
-    <a class="navbar-item" href="https://bulma.io">
+    <a class="navbar-item" href="/">
+      <b class="is-size-3">LEAP</b>
       <img
-        src="https://bulma.io/images/bulma-logo.png"
-        alt="Bulma: Free, open source, and modern CSS framework based on Flexbox"
-        width="112"
-        height="28"
+        src="/images/leap.png"
+        alt="LEAP"
       />
-    </a>
-
-    <a
+      </a>
+      <a
       role="button"
       class="navbar-burger"
       aria-label="menu"
       aria-expanded="false"
     >
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-
-  <div id="navbarBasicExample" class="navbar-menu">
-    <div class="navbar-end">
-      <%= if @state.current_user do %>
-        <div class="navbar-item">
-          <div class="buttons">
-            <%= link "Sign Out #{@state.current_user.display_name}", to: "/session", method: :delete, phx_click: "disconnect", phx_target: "##{@state.id}" , class: "button is-light" %>
-          </div>
-        </div>
-      <% end %>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
     </div>
-  </div>
-</nav>
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        <%= if @state.current_user do %>
+          <div class="navbar-item">
+            <div class="buttons">
+              <%= link "Sign Out #{@state.current_user.display_name}", to: "/session", method: :delete, phx_click: "disconnect", phx_target: "##{@state.id}" , class: "button is-light" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </nav>
