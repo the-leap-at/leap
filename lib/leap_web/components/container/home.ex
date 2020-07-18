@@ -1,7 +1,6 @@
 defmodule LeapWeb.Components.Container.Home do
   use LeapWeb, :component
 
-  alias LeapWeb.AppLive
   alias Leap.Content
   alias Leap.Content.Schema.Post
 
@@ -15,13 +14,11 @@ defmodule LeapWeb.Components.Container.Home do
     {:ok, assign(socket, assigns)}
   end
 
-  defp post_link(%Post{type: post_type, title: title, id: post_id}, socket) do
-    live_patch(title,
-      to: Routes.live_path(socket, AppLive, post_type, post_id),
-      class: "is-size-5"
+  def post_details_component(%Post{id: post_id} = post, socket) do
+    live_component(socket, LeapWeb.Components.Shared.PostDetails,
+      action: :init,
+      id: "post_preview#{to_string(post_id)}",
+      post: post
     )
   end
-
-  defp post_icon(%Post{type: :question}), do: "fa-question"
-  defp post_icon(%Post{type: :learn_path}), do: "fa-tasks"
 end
