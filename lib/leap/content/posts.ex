@@ -4,6 +4,8 @@ defmodule Leap.Content.Posts do
   The functions that are not exposed throught the context (defdelegate) are only context internal
   """
   alias Leap.Repo
+  alias Leap.Content.Queries
+
   alias Leap.Content
   alias Leap.Content.Schema.Post
   alias Leap.Accounts.Schema.User
@@ -69,6 +71,22 @@ defmodule Leap.Content.Posts do
 
   defp transition_state_to_published(_user, %Post{state: :published} = post), do: {:ok, post}
   defp transition_state_to_published(user, post), do: transition_state_to(user, post, :published)
+
+  @spec home(User.t() | nil) :: [Post.t()]
+  def home(%User{id: user_id}) do
+    user_id
+    |> Queries.posts_for_user_favorites()
+    |> Queries.do_preload([:user, :category])
+    |> Queries.do_limit(50)
+    |> Repo.all()
+  end
+
+  def home(_user) do
+    Queries.published_posts_query()
+    |> Queries.do_preload([:user, :category])
+    |> Queries.do_limit(50)
+    |> Repo.all()
+  end
 
   # UNSCOPED
 

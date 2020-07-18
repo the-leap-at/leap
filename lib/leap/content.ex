@@ -16,6 +16,7 @@ defmodule Leap.Content do
   defdelegate update_post(user, post, attrs), to: Posts, as: :update
   defdelegate update_post!(user, post, attrs), to: Posts, as: :update!
   defdelegate publish_post(user, post, attrs), to: Posts, as: :publish
+  defdelegate home_posts(user), to: Posts, as: :home
 
   ## UNSCOPED
 

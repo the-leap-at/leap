@@ -8,23 +8,19 @@
     <div class="container">
       <h1 class="title">ANSWERS</h1>
     </div>
-  </section>
-  <div id="answers" phx-update="append">
-    <%= for answer <- @answers do %>
-      <%= if display_answer(@current_user, answer) do %>
-        <section class="section" id="answer_<%= answer.id %>">
+    <div id="answers" phx-update="append">
+      <%= for answer <- @answers do %>
+        <%= if display_answer(@current_user, answer) do %>
           <div class="container">
             <%= post_component(@current_user, answer, @socket) %>
           </div>
-        </section>
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
-  <%= if display_add_answer(@current_user, @question, @answers) do %>
-    <section class="section">
+    </div>
+    <%= if display_add_answer(@current_user, @question, @answers) do %>
       <div class="container">
         <button class="button is-primary is-fullwidth" type="button" phx-click="add_answer" phx-target="#<%= @id %>">ADD ANSWER</button>
       </div>
-    </section>
-  <% end %>
+    <% end %>
+  </section>
 </div>

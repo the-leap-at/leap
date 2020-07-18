@@ -1,0 +1,28 @@
+<div id=<%= @id %> class="media">
+  <div class="media-left">
+    <span class="icon is-large">
+      <i class="fas fa-2x <%= post_icon(@post) %>"></i>
+    </span>
+  </div>
+  <div class="media-content">
+    <div class="content">
+      <div>
+        <%= post_link(@post, @socket) %>
+      </div>
+    </div>
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <span class="tag">
+            <%= @post.category.name %>
+          </span>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <span class="is-size-7"> updated <%= Timex.from_now(@post.updated_at) %> by <%= @post.user.display_name %></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

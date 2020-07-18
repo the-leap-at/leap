@@ -4,22 +4,17 @@ defmodule Leap.Group.Categories do
   The functions that are not exposed throught Content (defdelegate) are only context internal
   """
   alias Leap.Repo
-  import Ecto.Query, warn: false
+  alias Leap.Group.Queries
+
   alias Leap.Group
   alias Leap.Group.Schema.Category
   alias Leap.Group.Schema.UserCategory
 
   @spec search(term :: binary()) :: [Category.t()]
   def search(term) do
-    term = format_search_term(term)
-
-    where(
-      Category,
-      fragment(
-        "name @@ to_tsquery(?)",
-        ^term
-      )
-    )
+    term
+    |> format_search_term()
+    |> Queries.search_category()
     |> Repo.all()
   end
 

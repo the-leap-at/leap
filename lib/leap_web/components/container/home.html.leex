@@ -1,3 +1,10 @@
 <div id="<%= @id %>">
-  HOME PAGE
+  <section class="section">
+    <div class="container">
+      <div class="title">Latest Posts</div>
+      <%= for post <- @posts do %>
+        <%= post_details_component(post, @socket) %>
+      <% end %>
+    </div>
+  </section>
 </div>
