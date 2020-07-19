@@ -33,24 +33,24 @@ defmodule Leap.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # PHOENIX
       {:phoenix, "~> 1.5"},
       {:phoenix_pubsub, "~> 2.0"},
       {:phoenix_ecto, "~> 4.0"},
       {:phoenix_live_view, "~> 0.14"},
-      {:ecto_sql, "~> 3.1"},
-      {:ecto_enum, "~> 1.4"},
-      {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.1"},
-      {:floki, ">= 0.0.0", only: :test},
-      {:typed_struct, "~> 0.1.4"},
-      {:machinery, "~> 1.0.0"},
+      # ECTO
+      {:ecto_sql, "~> 3.1"},
+      {:ecto_enum, "~> 1.4"},
+      {:postgrex, ">= 0.0.0"},
+      # MARKDOWN
       {:html_sanitize_ex, "~> 1.3.0"},
       {:earmark, "~> 1.4.3"},
-      {:timex, "~> 3.6"},
+      # AUTHENTICATION
       {:pow, "~> 1.0"},
       {:pow_postgres_store, "~> 1.0.0-rc2"},
       {:pow_assent, "~> 0.4"},
@@ -58,8 +58,18 @@ defmodule Leap.MixProject do
       {:ssl_verify_fun, "~> 1.1"},
       {:mint, "~> 1.0"},
       {:castore, "~> 0.1"},
+      # MAILER
       {:swoosh, "~> 0.25"},
-      {:bodyguard, "~>2.4"}
+      # AUTHORIZATION
+      {:bodyguard, "~>2.4"},
+      # TOOLS
+      {:typed_struct, "~> 0.1.4"},
+      {:machinery, "~> 1.0.0"},
+      {:timex, "~> 3.6"},
+      # TESTING
+      {:floki, ">= 0.0.0", only: :test},
+      {:faker, "~> 0.14", only: :test},
+      {:ex_machina, "~> 2.4", only: :test, runtime: false}
     ]
   end
 
