@@ -75,4 +75,6 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
+config :swoosh, serve_mailbox: true, preview_port: 4001
+
 import_config "dev.secret.exs"

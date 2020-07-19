@@ -20,8 +20,6 @@ config :leap, LeapWeb.Endpoint,
 
 config :leap, Leap.Mailers, adapter: Swoosh.Adapters.Local
 
-config :swoosh, serve_mailbox: true, preview_port: 4001
-
 # for dev providers are added in dev.secret.exs
 config :leap, :pow_assent,
   http_adapter: Assent.HTTPAdapter.Mint,
