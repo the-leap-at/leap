@@ -2,7 +2,7 @@ defmodule Leap.Accounts.UserIdentities do
   @moduledoc """
   TODO
   PowAssent context module. Need this as workaround if user already registered with email and password, cannot register again with OAUTH
-  Check when this is addressed: https://github.com/pow-auth/pow_assent/issues/115 and retry without this context
+  Check when this is addressed: https://github.com/pow-auth/pow_assent/issues/115 https://github.com/pow-auth/pow_assent/issues/115 and retry without this context
   """
   use PowAssent.Ecto.UserIdentities.Context,
     repo: Leap.Repo,

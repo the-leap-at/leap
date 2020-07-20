@@ -22,6 +22,8 @@ defmodule LeapWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
+      import Leap.Factory
+
       alias LeapWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing

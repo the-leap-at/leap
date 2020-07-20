@@ -7,6 +7,7 @@ defmodule Leap.Accounts.Users do
   alias Leap.Repo
   alias Leap.Accounts.Schema.User
 
+  @spec fetch_user(email :: String.t()) :: {:ok, User.t()} | {:error, any()}
   def fetch_user(email) do
     case Repo.get_by(User, email: email) do
       %User{} = user -> {:ok, user}

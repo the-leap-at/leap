@@ -24,6 +24,7 @@ defmodule Leap.DataCase do
       import Ecto.Changeset
       import Ecto.Query
       import Leap.DataCase
+      import Leap.Factory
     end
   end
 
