@@ -26,7 +26,7 @@ defmodule Leap.Accounts.UsersTest do
       assert {:ok, %User{id: ^user_id, state: :display_name_set} = user} =
                Users.transition_state_to(user, :display_name_set)
 
-      assert {:ok, %User{id: ^user_id, state: :onboarded} = user} =
+      assert {:ok, %User{id: ^user_id, state: :onboarded}} =
                Users.transition_state_to(user, :onboarded)
     end
 

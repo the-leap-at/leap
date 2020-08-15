@@ -11,38 +11,30 @@ defmodule Leap.Factory do
       picture_url: Faker.Internet.url(),
       state: :onboarded,
       display_name: Faker.Internet.user_name(),
-      fav_categories: random_categories()
+      fav_categories: build_list(Enum.random(1..5), :category)
     }
-  end
-
-  defp random_categories do
-    random_size = Enum.random(1..length(Category.category_name()))
-
-    Category.category_name()
-    |> Enum.take_random(random_size)
-    |> Enum.map(&build(:category, %{name: &1}))
   end
 
   def category_factory do
     %Category{
-      name: Enum.random(Category.category_name())
+      name: Faker.Internet.slug()
     }
   end
 
   def post_factory do
     %Post{
       title: Faker.Lorem.sentence(),
-      body: Faker.Lorem.paragraphs(),
+      body: Faker.Lorem.paragraph(2..10),
       state: :published,
       category: build(:category),
       user: build(:user)
     }
   end
 
-  def leran_path_factory do
+  def learn_path_factory do
     %Post{
       title: Faker.Lorem.sentence(),
-      body: Faker.Lorem.paragraphs(),
+      body: Faker.Lorem.paragraph(2..10),
       type: :learn_path,
       state: :published,
       parents: random_posts(:question),
@@ -54,7 +46,7 @@ defmodule Leap.Factory do
   def question_factory do
     %Post{
       title: Faker.Lorem.sentence(5, "?"),
-      body: Faker.Lorem.paragraphs(),
+      body: Faker.Lorem.paragraph(2..10),
       type: :question,
       state: :published,
       children: random_posts(:learn_path),
