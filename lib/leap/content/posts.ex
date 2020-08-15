@@ -48,15 +48,6 @@ defmodule Leap.Content.Posts do
     end
   end
 
-  @spec update!(User.t(), Post.t(), attrs :: map()) :: Post.t()
-  def update!(%User{} = user, %Post{} = post, attrs) do
-    Bodyguard.permit!(Content, :post_mutation, user, post)
-
-    post
-    |> Post.changeset_update(attrs)
-    |> Repo.update!()
-  end
-
   @spec publish(User.t(), Post.t(), attrs :: map()) ::
           {:ok, Post.t()} | {:error, Ecto.Changeset.t(Post.t())}
   def publish(%User{} = user, %Post{state: state} = post, attrs)
@@ -90,6 +81,7 @@ defmodule Leap.Content.Posts do
 
   # UNSCOPED
 
+  @doc "Any user can create a post. `user_id` should be passed as argument"
   @spec create!(attrs :: map()) :: Post.t()
   def create!(attrs) do
     %Post{}

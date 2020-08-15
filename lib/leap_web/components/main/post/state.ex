@@ -77,7 +77,7 @@ defmodule LeapWeb.Components.Main.Post.State do
   end
 
   def commit(:update_post_category, post_params, state) do
-    post = Content.update_post!(state.current_user, state.post, post_params)
+    {:ok, %Post{} = post} = Content.update_post(state.current_user, state.post, post_params)
 
     state = %State{
       state
