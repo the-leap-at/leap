@@ -66,6 +66,7 @@ defmodule Leap.MixProject do
       {:typed_struct, "~> 0.1.4"},
       {:machinery, "~> 1.0.0"},
       {:timex, "~> 3.6"},
+      {:credo, "~> 1.4", only: [:dev, :test], runtime: false},
       # TESTING
       {:floki, ">= 0.0.0", only: :test},
       {:faker, "~> 0.14", only: :test},
