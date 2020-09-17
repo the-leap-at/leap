@@ -7,19 +7,10 @@ defmodule LeapWeb.Components.Shared.MarkdownTextarea do
   use LeapWeb, :component
 
   def mount(socket) do
-    {:ok, assign(socket, :preview, false)}
+    {:ok, socket}
   end
 
   def update(%{action: :init} = assigns, socket) do
     {:ok, assign(socket, assigns)}
-  end
-
-  def handle_event("switch_preview", _params, %{assigns: %{preview: preview}} = socket) do
-    {:noreply, assign(socket, :preview, not preview)}
-  end
-
-  # hide the textarea while in preview mode, but to be still part of the post_form
-  defp hidden(preview) do
-    if preview, do: "is-hidden"
   end
 end

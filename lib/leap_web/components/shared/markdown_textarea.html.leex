@@ -1,16 +1,9 @@
 <div class="field" id="<%= @id %>">
-	<%= if @preview do %>
-		<button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @id %>">Edit</button>
-		<div class="content">
-			<%= markdown_to_html(@value) %>
-		</div>
-	<% else %>
-		<button class="button is-small" type="button" phx-click="switch_preview" phx-target="#<%= @id %>">Preview</button>
-	<% end %>
 
-	<div class="control">
-		<%= textarea  @post_form, @field, placeholder: "EMPTY MD", value: @value, class: "textarea #{hidden(@preview)}", rows: 12 %>
-	</div>
-	<%= error_tag @post_form, @field %>
+  <div class="control" phx-update="ignore">
+    <%= hidden_input  @form, @field, id: "textarea_#{@id}", value: @value %>
+    <div id="<%= "tui_editor_" <> @id %>" phx-hook="TuiEditor" data-textarea-id='<%= "textarea_" <> @id  %>'></div>
+  </div>
+  <%= error_tag @form, @field %>
 
 </div>

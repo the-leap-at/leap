@@ -18,8 +18,32 @@ import 'phoenix_html';
 
 import { Socket } from 'phoenix';
 import LiveSocket from 'phoenix_live_view';
+import TuiEditor from '@toast-ui/editor';
 
 let Hooks = {};
+
+Hooks.TuiEditor = {
+  mounted() {
+    let editor = this.el;
+    let textarea = document.getElementById(editor.dataset.textareaId);
+
+    let tuiEditor = new TuiEditor({
+      el: editor,
+      initialEditType: 'wysiwyg',
+      height: 'auto',
+      minHeight: '300px',
+      usageStatistics: false,
+      initialValue: textarea.value,
+      events: {
+        change: function () {
+          textarea.value = tuiEditor.getMarkdown();
+          const evt = new Event('change', { bubbles: true });
+          textarea.dispatchEvent(evt);
+        },
+      },
+    });
+  },
+};
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
