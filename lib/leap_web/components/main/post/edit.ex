@@ -65,7 +65,7 @@ defmodule LeapWeb.Components.Main.Post.Edit do
     live_component(socket, LeapWeb.Components.Shared.MarkdownTextarea,
       id: "#{id}_body",
       action: :init,
-      post_form: post_form,
+      form: post_form,
       field: :body,
       value: Content.get_field(state.post_changeset, :body)
     )
